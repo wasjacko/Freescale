@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test B : Intégrations Centralisées (Store)</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: '#E34400' }, fontFamily: { sans: ['Inter', 'sans-serif'] } } } };
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FAFAFA; color: #121212; }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .spinner { width: 16px; height: 16px; border: 2px solid rgba(227,68,0,0.2); border-top-color: #E34400; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden">
+    <div id="root" class="w-full h-full"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const App = () => {
+            const [status, setStatus] = useState('idle'); // idle, connecting, success
+
+            const connectTool = () => {
+                setStatus('connecting');
+                setTimeout(() => setStatus('success'), 1500);
+            };
+
+            return (
+                <div className="flex flex-col h-full w-full">
+                    
+                    {/* Fake Settings Layout */}
+                    <div className="h-16 border-b border-gray-200 bg-white flex items-center px-8">
+                        <div className="font-bold text-lg flex items-center gap-2">Paramètres de l'Espace</div>
+                    </div>
+
+                    <div className="flex-1 flex bg-gray-50/50">
+                        
+                        {/* Fake Settings Menu */}
+                        <div className="w-[280px] p-6 border-r border-gray-200">
+                            <ul className="space-y-2">
+                                <li className="text-sm font-semibold text-gray-500 p-2 opacity-50">Mon Profil</li>
+                                <li className="bg-white border rounded-lg text-sm font-semibold text-gray-900 p-2 shadow-sm">Intégrations & Canaux</li>
+                                <li className="text-sm font-semibold text-gray-500 p-2 opacity-50">Tarification</li>
+                            </ul>
+                        </div>
+
+                        {/* Integration Store (The AB Test focus) */}
+                        <div className="flex-1 p-10 flex flex-col items-center">
+                            
+                            <div className="max-w-[800px] w-full fade-in">
+                                <h2 className="text-2xl font-bold text-gray-900 mb-2">Connecter un nouveau canal</h2>
+                                <p className="text-sm text-gray-500 mb-10 leading-relaxed">
+                                    Associez vos applications à Freescale. Vous pourrez ensuite attribuer chaque canal à un client depuis votre Inbox.
+                                </p>
+
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                    
+                                    {/* App Card: Slack */}
+                                    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col items-start transition-all hover:shadow-md">
+                                        <div className="text-4xl mb-4">🟣</div>
+                                        <h3 className="font-bold text-gray-900 mb-1 text-base">Slack</h3>
+                                        <p className="text-xs text-gray-500 mb-6 flex-1">Workspaces Pro</p>
+                                        
+                                        {status === 'idle' && (
+                                            <button onClick={connectTool} className="w-full py-2 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-lg transition-colors">
+                                                Connecter
+                                            </button>
+                                        )}
+                                        {status === 'connecting' && (
+                                            <button disabled className="w-full py-2 bg-gray-100 flex justify-center text-xs font-semibold rounded-lg">
+                                                <div className="spinner"></div>
+                                            </button>
+                                        )}
+                                        {status === 'success' && (
+                                            <button disabled className="w-full py-2 border border-green-200 bg-green-50 text-green-700 text-xs font-semibold rounded-lg flex justify-center items-center gap-2">
+                                                <span>✓</span> Connecté
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {/* App Card: WhatsApp */}
+                                    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col items-start opacity-70">
+                                        <div className="text-4xl mb-4">💬</div>
+                                        <h3 className="font-bold text-gray-900 mb-1 text-base">WhatsApp</h3>
+                                        <p className="text-xs text-gray-500 mb-6 flex-1">Numéro Pro/Perso</p>
+                                        <button className="w-full py-2 border border-gray-200 text-gray-700 text-xs font-semibold rounded-lg">Connecter</button>
+                                    </div>
+
+                                    {/* App Card: Gmail */}
+                                    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col items-start opacity-70">
+                                        <div className="text-4xl mb-4">✉️</div>
+                                        <h3 className="font-bold text-gray-900 mb-1 text-base">Gmail</h3>
+                                        <p className="text-xs text-gray-500 mb-6 flex-1">Emails Google</p>
+                                        <button className="w-full py-2 border border-gray-200 text-gray-700 text-xs font-semibold rounded-lg">Connecter</button>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            )
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
