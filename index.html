@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Freescale - L'IA passive pour freelances</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    .animate-on-scroll-hidden { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+    .animate-on-scroll-visible { opacity: 1; transform: translateY(0); }
+    
+    .dot-bg {
+      background-image: url("https://framerusercontent.com/images/wGAHOWhVswEtWkOKTJN6s2CW0.svg?width=96&height=96");
+      background-size: 26px;
+      opacity: 0.15;
+      mask-image: linear-gradient(to bottom, transparent 0%, transparent 400px, black 700px);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 400px, black 700px);
+    }
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    /* Custom Ticker Styles */
+    .ticker-container {
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker 40s linear infinite;
+    }
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Blur edge effect for logo ticker */
+    .ticker-mask {
+      mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+    }
+
+    #app-root {
+      background: linear-gradient(rgb(250, 250, 250) 0%, rgb(241, 241, 242) 48.4758%, rgb(255, 255, 255) 100%);
+    }
+
+    #services {
+      --card-stack-offset: 30px;
+    }
+    .sticky:hover {
+      transform: translateY(-5px);
+    }
+  </style>
+
+  <style type="text/tailwindcss">
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer base {
+      @font-face {
+        font-family: 'Satoshi';
+        src: url('https://cdn.fontshare.com/wf/TTN6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Medium.woff2') format('woff2');
+        font-weight: 500;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'Satoshi';
+        src: url('https://cdn.fontshare.com/wf/6ID6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Bold.woff2') format('woff2');
+        font-weight: 700;
+        font-style: normal;
+      }
+    }
+
+    @layer utilities {
+      .mask-marquee {
+        mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%);
+      }
+      .mask-blur {
+        mask-image: linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 25%, rgba(0, 0, 0, 0) 37.5%);
+      }
+      .mask-fade-v {
+        mask-image: linear-gradient(to bottom, transparent 0%, black 12.5%, black 87.5%, transparent 100%);
+      }
+      .blur-transition {
+        backdrop-filter: blur(10px);
+        mask-image: linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+      }
+    }
+  </style>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      important: '#app-root',
+      theme: {
+        extend: {
+          colors: {
+            'brand-primary': 'rgb(227, 68, 0)',
+            'brand-secondary': 'rgb(255, 87, 34)',
+            'brand-dark': 'rgb(18, 18, 18)',
+            'brand-gray': 'rgb(97, 97, 97)',
+            'brand-surface': 'rgb(241, 241, 242)',
+            'neutral-background': 'rgb(250, 250, 250)',
+            'neutral-surface': 'rgb(255, 255, 255)',
+            'text-primary': 'rgb(18, 18, 18)',
+            'text-secondary': 'rgb(97, 97, 97)',
+            'text-onPrimary': 'rgb(255, 255, 255)',
+            'text-muted': 'rgb(97, 97, 97)'
+          },
+          fontFamily: {
+            'primary': ['Satoshi', 'Inter', 'sans-serif'],
+            'serif': ['Instrument Serif', 'serif'],
+            'secondary': ['Inter Tight', 'sans-serif'],
+          },
+          borderRadius: {
+            '3xl': '32px',
+            'xl': '15px',
+            'full': '100px',
+          },
+          boxShadow: {
+            'card': 'rgba(0, 0, 0, 0.05) 0px 5px 10px 2px',
+            'nav': 'rgba(0, 0, 0, 0.05) 0px 2px 10px 0px',
+            'badge': 'rgba(0, 0, 0, 0.15) 0px 10px 20px 0px',
+            'cta': 'rgba(0, 0, 0, 0.2) 0px 3px 10px 0px'
+          },
+          animation: {
+            'ticker': 'ticker 30s linear infinite',
+            'ticker-fast': 'ticker 20s linear infinite',
+            'marquee': 'marquee 30s linear infinite',
+            'marquee-up': 'marquee-up 30s linear infinite',
+            'marquee-down': 'marquee-down 30s linear infinite'
+          },
+          keyframes: {
+            ticker: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' },
+            },
+            marquee: {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-50%)' }
+            },
+            'marquee-up': {
+              '0%': { transform: 'translateY(0%)' },
+              '100%': { transform: 'translateY(-50%)' },
+            },
+            'marquee-down': {
+              '0%': { transform: 'translateY(-50%)' },
+              '100%': { transform: 'translateY(0%)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body id="app-root">
+  <div class="font-primary bg-neutral-background text-text-primary overflow-x-hidden min-h-screen flex flex-col w-full relative">
+    
+    <!-- Background Dots -->
+    <div class="absolute inset-0 dot-bg pointer-events-none z-0"></div>
+
+    <header class="fixed top-6 left-0 right-0 z-50 px-6">
+      <nav class="relative w-full max-w-[1400px] h-[80px] mx-auto flex items-center justify-between px-[25px] overflow-visible" data-framer-name="Desktop">
+        <!-- Logo Section -->
+        <div class="flex-shrink-0 w-[128px]">
+          <a href="#" class="block w-[61px] h-[25px] text-2xl font-serif text-brand-dark tracking-tight font-bold leading-none">
+            Freescale
+          </a>
+        </div>
+
+        <!-- Centered Nav Menu Pill -->
+        <div class="hidden md:flex items-center justify-center bg-white shadow-nav rounded-[8px] p-1 gap-1">
+          <a href="/" class="px-3 py-2 text-[16px] font-medium tracking-[-0.32px] text-text-primary hover:bg-neutral-50 rounded-[5px] transition-colors">
+            Accueil
+          </a>
+          <a href="#services" class="px-3 py-2 text-[16px] font-medium tracking-[-0.32px] text-text-primary hover:bg-neutral-50 rounded-[5px] transition-colors">
+            Fonctionnalités
+          </a>
+          <a href="#testimonial" class="px-3 py-2 text-[16px] font-medium tracking-[-0.32px] text-text-primary hover:bg-neutral-50 rounded-[5px] transition-colors">
+            Avis Confirmés
+          </a>
+          <a href="#pricing" class="px-3 py-2 text-[16px] font-medium tracking-[-0.32px] text-text-primary hover:bg-neutral-50 rounded-[5px] transition-colors">
+            Tarifs
+          </a>
+          <a href="#faq" class="px-3 py-2 text-[16px] font-medium tracking-[-0.32px] text-text-primary hover:bg-neutral-50 rounded-[5px] transition-colors">
+            FAQ
+          </a>
+        </div>
+
+        <!-- CTA Button Section -->
+        <div class="flex-shrink-0 flex justify-end min-w-[128px]">
+          <a href="/onboarding.html" class="bg-brand-primary text-white px-[18px] py-0 h-[40px] flex items-center justify-center rounded-[10px] shadow-cta text-[16px] font-medium tracking-[-0.32px] hover:brightness-110 transition-all whitespace-nowrap">
+            Sign up
+          </a>
+        </div>
+
+      </nav>
+    </header>
+
+    <main class="flex-grow relative z-10">
+      <section class="relative pt-40 pb-20 flex flex-col items-center justify-center text-center overflow-hidden">
+        <div class="container mx-auto px-6 max-w-[1728px] space-y-12">
+          
+          <!-- Rating & Social Proof -->
+          <div data-animation-on-scroll class="flex flex-col md:flex-row items-center justify-center gap-4">
+            <div class="flex -space-x-3 items-center">
+              <div class="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-neutral-200">
+                <img src="https://framerusercontent.com/images/YIK5wPuLRAshL0AC3m0zxYgnkVM.png" alt="User" class="w-full h-full object-cover">
+              </div>
+              <div class="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-neutral-200">
+                <img src="https://framerusercontent.com/images/toLqdxqDh32BO7QgnFcrTRD8o.png" alt="User" class="w-full h-full object-cover">
+              </div>
+              <div class="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-neutral-200">
+                <img src="https://framerusercontent.com/images/kgkOqYtk0Go410dG4Apxo3MJU.png" alt="User" class="w-full h-full object-cover">
+              </div>
+            </div>
+            
+            <div class="flex flex-col items-start text-left">
+              <div class="flex items-center gap-2">
+                <div class="flex text-brand-primary">
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                </div>
+                <span class="bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-full">4.9</span>
+              </div>
+              <p class="text-text-primary text-base font-medium tracking-tight">Plus de 500+ Freelances libérés</p>
+            </div>
+          </div>
+
+          <!-- Main Heading -->
+          <div data-animation-on-scroll class="max-w-[1000px] mx-auto space-y-2">
+            <h1 class="text-[76px] leading-[1.0] font-medium tracking-[-0.03em] text-text-primary flex flex-wrap justify-center items-center gap-x-4">
+              <span>Le</span>
+              <span class="font-serif italic font-normal text-brand-primary">copilote</span>
+              <span>de</span>
+              <span>relation</span>
+              <span class="font-serif italic font-normal text-brand-primary">client</span>
+              <span>pour</span>
+              <span>les</span>
+              <span>experts.</span>
+            </h1>
+            <p class="text-[22px] text-text-secondary font-medium tracking-tight mt-6 max-w-[800px] mx-auto">
+              Arrêtez de perdre 30% de votre journée à chercher des infos.<br>
+              Centralisez Mails, Slack et <b>votre WhatsApp personnel</b>. Laissez l'IA extraire vos engagements automatiquement.
+              <span class="block mt-4 text-brand-primary text-xl font-bold">ROI validé : +1 000€ / mois de valeur créée.</span>
+            </p>
+          </div>
+
+          <!-- CTAs -->
+          <div data-animation-on-scroll class="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
+            <a href="/onboarding.html" class="bg-brand-primary text-white font-bold px-10 py-5 rounded-xl shadow-cta hover:scale-105 transition-transform text-lg">
+              Essai gratuit (30 jours)
+            </a>
+            <a href="#services" class="bg-white text-brand-dark border-2 border-brand-dark font-bold px-10 py-5 rounded-xl hover:bg-neutral-50 transition-colors text-lg">
+              Le "Zero-Input" NLP →
+            </a>
+          </div>
+
+          <!-- Main UI Showcase -->
+          <div data-animation-on-scroll class="w-full pt-20 px-4">
+            <div class="relative max-w-[1100px] mx-auto rounded-[32px] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.25)] border-[12px] border-black/5 bg-white">
+              <img src="/Users/Wacil.AIT/.gemini/antigravity/brain/bf2bd7a0-56fa-4713-a42d-f0d83c7126f3/freescale_ui_mockup_hero_1773739165229.png" alt="Freescale UI Mockup" class="w-full h-auto object-cover">
+              
+              <!-- Floating Integration Badges -->
+              <div class="absolute top-10 left-10 flex flex-col gap-4">
+                <div class="bg-white/95 backdrop-blur-md px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-black/5">
+                  <div class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div>
+                  <span class="text-xs font-bold text-black uppercase tracking-widest">WhatsApp personnel Connecté</span>
+                </div>
+                <div class="bg-white/95 backdrop-blur-md px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-black/5">
+                  <div class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></div>
+                  <span class="text-xs font-bold text-black uppercase tracking-widest">Workspace Slack Sync</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marquee Logo Section (From Step 2) -->
+          <div class="flex flex-col items-center justify-center gap-4 py-8 mt-12 overflow-hidden w-full max-w-[1728px] mx-auto" data-animation-on-scroll>
+            <div class="text-center">
+              <p class="text-[16px] font-medium leading-[24px] tracking-[-0.32px] text-text-muted font-primary">
+                Ils gèrent leur activité avec Freescale
+              </p>
+            </div>
+
+            <!-- Marquee Container -->
+            <div class="relative w-full max-w-[700px] h-[34px] overflow-hidden mask-marquee">
+              <div class="flex w-[200%] h-full items-center animate-marquee">
+                <!-- First set of logos -->
+                <ul class="flex items-center justify-around w-1/2 list-none p-0 m-0 gap-10">
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/5620312/pexels-photo-5620312.jpeg?w=124&h=20&fit=crop" alt="Client Logo 1" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/3336447/pexels-photo-3336447.jpeg?w=32&h=20&fit=crop" alt="Client Logo 2" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/303058/pexels-photo-303058.jpeg?w=118&h=20&fit=crop" alt="Client Logo 3" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/890065/pexels-photo-890065.jpeg?w=36&h=20&fit=crop" alt="Client Logo 4" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/7527555/pexels-photo-7527555.jpeg?w=83&h=20&fit=crop" alt="Client Logo 5" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                </ul>
+
+                <!-- Second set of logos -->
+                <ul class="flex items-center justify-around w-1/2 list-none p-0 m-0 gap-10" aria-hidden="true">
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/5620312/pexels-photo-5620312.jpeg?w=124&h=20&fit=crop" alt="Client Logo 1" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/3336447/pexels-photo-3336447.jpeg?w=32&h=20&fit=crop" alt="Client Logo 2" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/303058/pexels-photo-303058.jpeg?w=118&h=20&fit=crop" alt="Client Logo 3" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/890065/pexels-photo-890065.jpeg?w=36&h=20&fit=crop" alt="Client Logo 4" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                  <li class="flex-shrink-0">
+                    <img src="https://images.pexels.com/photos/7527555/pexels-photo-7527555.jpeg?w=83&h=20&fit=crop" alt="Client Logo 5" class="h-5 w-auto object-contain grayscale opacity-70 hover:opacity-100 transition-opacity">
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Services Section -->
+      <section id="services" class="relative w-full py-20 px-6 md:px-16 flex flex-col items-center gap-12 overflow-visible bg-gradient-to-b from-white to-[#FAFAFA] z-20">
+        
+
+
+        <!-- Section Header -->
+        <div class="max-w-[1000px] text-center mt-12 mb-8 z-10">
+          <h2 class="text-[40px] md:text-[52px] leading-[0.9] font-medium tracking-[-2.08px] text-brand-dark flex flex-wrap justify-center gap-x-3 gap-y-2">
+            <span>Défendez</span>
+            <span>votre</span>
+            <span class="font-serif italic font-normal tracking-[-0.52px]">temps,</span>
+            <span>libérez</span>
+            <span>votre</span>
+            <span class="font-serif italic font-normal tracking-[-0.52px]">charge</span>
+            <span class="font-serif italic font-normal tracking-[-0.52px]">mentale.</span>
+          </h2>
+          <p class="text-xl text-brand-gray mt-6 max-w-[700px] mx-auto font-medium">L'outil qui transforme le chaos des messages clients en un plan d'action structuré. Sans que vous n'ayez rien à saisir.</p>
+        </div>
+
+        <!-- Service Cards Stack -->
+        <div class="flex flex-col items-center gap-24 w-full max-w-[1016px] pb-32">
+          
+          <!-- Card 1: Unification -->
+          <div class="sticky top-[100px] w-full h-auto min-h-[500px] bg-white rounded-3xl border border-gray-100 shadow-card flex flex-col lg:flex-row overflow-hidden transition-transform duration-500 hover:scale-[0.99] z-10">
+            <div class="w-full lg:w-1/2 p-10 flex items-center justify-center">
+              <div class="w-full h-full min-h-[300px] rounded-xl overflow-hidden bg-brand-surface relative flex items-center justify-center bg-gray-900 border-[8px] border-black pb-8">
+                <!-- Abstract UI representation -->
+                <div class="space-y-4 w-[60%] animate-pulse">
+                  <div class="flex gap-4"><div class="w-10 h-10 bg-blue-500 rounded-full"></div><div class="h-10 bg-white/10 rounded w-full"></div></div>
+                  <div class="flex gap-4"><div class="w-10 h-10 bg-green-500 rounded-full"></div><div class="h-10 bg-white/10 rounded w-full"></div></div>
+                  <div class="flex gap-4"><div class="w-10 h-10 bg-yellow-500 rounded-full"></div><div class="h-10 bg-white/10 rounded w-[80%]"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="w-full lg:w-1/2 p-10 flex flex-col justify-between items-start gap-8">
+              <div class="space-y-5">
+                <h3 class="text-4xl md:text-[42px] font-medium tracking-tight text-brand-dark">Unification.</h3>
+                <p class="text-lg text-brand-gray font-medium leading-relaxed">
+                  Votre boîte de réception est notre algorithme. Mails, Slack, WhatsApp, Discord : liez vos canaux et l'intelligence passive centralise la donnée importante pour vous, sans configuration complexe.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Zéro Paramétrage</span>
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Slack App</span>
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Gmail Integration</span>
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Synchronisation en direct</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: AI Action Plan -->
+          <div class="sticky top-[130px] w-full h-auto min-h-[500px] bg-white rounded-3xl border border-gray-100 shadow-card flex flex-col lg:flex-row overflow-hidden transition-transform duration-500 hover:scale-[0.99] z-20">
+            <div class="w-full lg:w-1/2 p-10 flex items-center justify-center">
+              <div class="w-full h-full min-h-[300px] rounded-xl overflow-hidden relative bg-brand-surface flex items-center justify-center">
+                <div class="w-[70%] bg-white p-6 rounded-xl shadow-lg border border-black/5 space-y-3">
+                  <div class="w-1/2 h-4 bg-gray-200 rounded"></div>
+                  <div class="w-full h-6 bg-brand-primary/20 text-brand-primary font-bold px-3 py-1 flex items-center rounded"><svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path></svg> Appeler client (Priorité Haute)</div>
+                  <div class="w-[80%] h-6 bg-brand-primary/20 text-brand-primary font-bold px-3 py-1 flex items-center rounded"><svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path></svg> Rendre maquettes</div>
+                </div>
+              </div>
+            </div>
+            <div class="w-full lg:w-1/2 p-10 flex flex-col justify-between items-start gap-8">
+              <div class="space-y-5">
+                <h3 class="text-4xl md:text-[42px] font-medium tracking-tight text-brand-dark">Plan Prémâché.</h3>
+                <p class="text-lg text-brand-gray font-medium leading-relaxed">
+                  L'IA lit les échanges à votre place et extrait automatiquement vos engagements. Chaque matin, accédez à votre plan d'action hiérarchisé : aucune promesse client ne tombe aux oubliettes.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Action Extraction</span>
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>To-do Automatique</span>
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Gestion des Priorités</span>
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Suivi Client Intégré</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Prioritization -->
+          <div class="sticky top-[160px] w-full h-auto min-h-[500px] bg-white rounded-3xl border border-gray-100 shadow-card flex flex-col lg:flex-row overflow-hidden transition-transform duration-500 hover:scale-[0.99] z-30">
+            <div class="w-full lg:w-1/2 p-10 flex items-center justify-center">
+              <div class="w-full h-full min-h-[300px] rounded-xl overflow-hidden relative bg-brand-surface flex items-center justify-center">
+                 <div class="w-[80%] bg-white p-6 rounded-xl shadow-lg border border-black/5 space-y-4">
+                  <div class="flex justify-between border-b pb-2">
+                    <span class="font-bold">Client : Tech Corp</span>
+                    <span class="bg-red-100 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded">Impact Élevé</span>
+                  </div>
+                  <div class="text-xs text-gray-500">→ IA : "Attente de validation brief depuis 48h. Client stratégique (75% du CA)."</div>
+                  <div class="w-full bg-brand-primary text-white text-center px-4 py-2 font-medium rounded text-sm hover:opacity-90 transition cursor-pointer">
+                    Prioriser cette action
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="w-full lg:w-1/2 p-10 flex flex-col justify-between items-start gap-8">
+              <div class="space-y-5">
+                <h3 class="text-4xl md:text-[42px] font-medium tracking-tight text-brand-dark">Business Impact.</h3>
+                <p class="text-lg text-brand-gray font-medium leading-relaxed">
+                  Freescale score vos tâches selon leur impact réel sur votre activité. Ne traitez plus les messages selon leur ordre d'arrivée, mais selon l'importance du client et l'urgence de l'engagement.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Urgency Scoring</span>
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Client Health</span>
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>Anti-anxiety Filter</span>
+                <span class="flex items-center gap-2 bg-brand-surface px-4 py-2 rounded-full text-sm font-medium"><span class="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center"></span>TJM Optimizer</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Works / Portfolio Section (Moved Up) -->
+      <section id="works" class="relative py-24 bg-white overflow-hidden">
+        <div class="container mx-auto px-6 max-w-[1200px]">
+          <div class="flex flex-col md:flex-row justify-between items-end gap-12 mb-16" data-animation-on-scroll>
+            <div class="flex flex-col gap-3">
+              <span class="text-sm font-medium tracking-[0.2em] text-brand-gray uppercase">Interfaces</span>
+              <h2 class="text-5xl md:text-[52px] font-medium leading-[0.9] tracking-tight text-brand-dark flex flex-wrap gap-x-3 gap-y-0">
+                L'efficacité
+                <span>que</span>
+                <span>vous</span>
+                <span class="font-serif italic font-normal">pouvez</span>
+                <span class="font-serif italic font-normal text-brand-primary">ressentir.</span>
+              </h2>
+            </div>
+          </div>
+
+          <!-- Image Ticker Grid -->
+          <div class="w-full max-w-[1200px] h-[700px] overflow-hidden mask-fade-v grid grid-cols-1 md:grid-cols-3 gap-4 relative">
+            
+            <!-- Column 1 (Scroll Up) -->
+            <div class="relative flex flex-col gap-4 h-full overflow-hidden">
+              <div class="flex flex-col gap-4 animate-marquee-up">
+                <!-- Original set -->
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/12456275/pexels-photo-12456275.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover" alt="Interface 1">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/27603433/pexels-photo-27603433.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover" alt="Interface 2">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/13779105/pexels-photo-13779105.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover" alt="Interface 3">
+                </div>
+                <!-- Duplicated for loop -->
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/12456275/pexels-photo-12456275.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/27603433/pexels-photo-27603433.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/13779105/pexels-photo-13779105.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover">
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 2 (Scroll Down) -->
+            <div class="relative flex flex-col gap-4 h-full overflow-hidden">
+              <div class="flex flex-col gap-4 animate-marquee-down">
+                <!-- Original set -->
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/57749/pexels-photo-57749.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover" alt="Interface 4">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/30144736/pexels-photo-30144736.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover" alt="Interface 5">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/33067479/pexels-photo-33067479.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover" alt="Interface 6">
+                </div>
+                <!-- Duplicated for loop -->
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/57749/pexels-photo-57749.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/30144736/pexels-photo-30144736.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/33067479/pexels-photo-33067479.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover">
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 3 (Scroll Up) -->
+            <div class="hidden md:flex relative flex-col gap-4 h-full overflow-hidden">
+              <div class="flex flex-col gap-4 animate-marquee-up">
+                <!-- Original set -->
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/19869759/pexels-photo-19869759.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover" alt="Interface 7">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/6288281/pexels-photo-6288281.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover" alt="Interface 8">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/8659276/pexels-photo-8659276.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover" alt="Interface 9">
+                </div>
+                <!-- Duplicated for loop -->
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/19869759/pexels-photo-19869759.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/6288281/pexels-photo-6288281.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover">
+                </div>
+                <div class="w-full aspect-square rounded-[15px] overflow-hidden shrink-0">
+                  <img src="https://images.pexels.com/photos/8659276/pexels-photo-8659276.jpeg?w=500&h=500&fit=crop" class="w-full h-full object-cover">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Blur Transition -->
+          <div class="absolute bottom-0 left-0 right-0 h-20 blur-transition z-10 pointer-events-none"></div>
+        </div>
+      </section>
+
+      <!-- Testimonials Section -->
+      <section id="testimonial" class="relative py-24 bg-white overflow-hidden">
+        <div class="container mx-auto px-6 max-w-[1200px]">
+          <div class="text-center mb-16" data-animation-on-scroll>
+            <h2 class="text-4xl md:text-5xl font-medium tracking-tight text-brand-dark mb-4">Ils ont retrouvé leur <span class="font-serif italic">liberté</span>.</h2>
+            <p class="text-lg text-brand-gray max-w-2xl mx-auto">Découvrez comment Freescale transforme le quotidien des freelances les plus occupés.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Testimonial 1 -->
+            <div class="bg-neutral-surface p-8 rounded-3xl border border-gray-100 shadow-sm" data-animation-on-scroll>
+              <div class="flex text-brand-primary mb-4">
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+              </div>
+              <p class="text-brand-dark font-medium mb-6 italic">"Je ne passe plus mes dimanches à trier mes mails. Freescale me donne ma liste de tâches dès que je me réveille. Un game changer."</p>
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                  <img src="https://framerusercontent.com/images/YIK5wPuLRAshL0AC3m0zxYgnkVM.png" alt="User" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <div class="font-bold text-sm">Thomas L.</div>
+                  <div class="text-xs text-brand-gray">UI Designer</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="bg-neutral-surface p-8 rounded-3xl border border-gray-100 shadow-sm" data-animation-on-scroll>
+              <div class="flex text-brand-primary mb-4">
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+              </div>
+              <p class="text-brand-dark font-medium mb-6 italic">"L'unification des messages est incroyable. Plus besoin d'ouvrir WhatsApp pour me souvenir de ce qu'un client m'a promis."</p>
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                  <img src="https://framerusercontent.com/images/toLqdxqDh32BO7QgnFcrTRD8o.png" alt="User" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <div class="font-bold text-sm">Julie M.</div>
+                  <div class="text-xs text-brand-gray">Consultante Marketing</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="bg-neutral-surface p-8 rounded-3xl border border-gray-100 shadow-sm" data-animation-on-scroll>
+              <div class="flex text-brand-primary mb-4">
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path></svg>
+              </div>
+              <p class="text-brand-dark font-medium mb-6 italic">"Les relances automatiques m'ont fait gagner un temps fou et m'ont permis d'être payé plus rapidement. Indispensable."</p>
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                  <img src="https://framerusercontent.com/images/kgkOqYtk0Go410dG4Apxo3MJU.png" alt="User" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <div class="font-bold text-sm">Marc D.</div>
+                  <div class="text-xs text-brand-gray">Développeur Freelance</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" class="relative py-24 bg-neutral-background">
+        <div class="container mx-auto px-6 max-w-[1200px]">
+          <div class="text-center mb-16" data-animation-on-scroll>
+            <h2 class="text-4xl md:text-5xl font-medium tracking-tight text-brand-dark mb-4">Un plan unique pour une <span class="font-serif italic text-brand-primary">liberté totale</span>.</h2>
+            <p class="text-lg text-brand-gray max-w-2xl mx-auto">Pas de paliers complexes. Un accès complet à toute la puissance de Freescale.</p>
+          </div>
+
+          <div class="max-w-[500px] mx-auto">
+            <!-- Unique Plan Card -->
+            <div class="bg-brand-dark p-10 rounded-[32px] border border-brand-dark shadow-badge flex flex-col justify-between relative overflow-hidden" data-animation-on-scroll>
+              <div class="absolute top-0 right-0 bg-brand-primary text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-tighter">Accès Anticipé</div>
+              <div>
+                <div class="text-brand-primary font-bold text-sm uppercase tracking-wider mb-2">Freescale Pro</div>
+                <div class="text-5xl font-bold text-white mb-6">25€<span class="text-lg text-gray-400 font-normal"> /mois</span></div>
+                <ul class="space-y-4 mb-10">
+                  <li class="flex items-center gap-3 text-gray-300 font-medium">
+                    <svg class="w-5 h-5 text-brand-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    WhatsApp personnel, Slack & Gmail
+                  </li>
+                  <li class="flex items-center gap-3 text-gray-300 font-medium">
+                    <svg class="w-5 h-5 text-brand-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    Extraction NLP "Zero-Input" illimitée
+                  </li>
+                  <li class="flex items-center gap-3 text-gray-300 font-medium">
+                    <svg class="w-5 h-5 text-brand-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    Score d'Urgence Business Impact
+                  </li>
+                  <li class="flex items-center gap-3 text-gray-300 font-medium">
+                    <svg class="w-5 h-5 text-brand-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    Installation en 2 minutes (OAuth & QR)
+                  </li>
+                  <li class="flex items-center gap-3 text-gray-300 font-medium">
+                    <svg class="w-5 h-5 text-brand-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    Support Prioritaire Direct
+                  </li>
+                </ul>
+              </div>
+              <a href="/onboarding.html" class="w-full py-5 text-center bg-brand-primary text-white font-bold rounded-2xl hover:opacity-90 transition-opacity text-lg shadow-cta">Démarrer mon essai de 30 jours</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer Section -->
+      <footer class="bg-white border-t border-gray-100 pt-20 pb-12">
+        <div class="container mx-auto px-6 max-w-[1200px]">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div class="col-span-1 md:col-span-2 space-y-6">
+              <a href="#" class="text-2xl font-serif text-brand-dark tracking-tight font-bold">Freescale</a>
+              <p class="text-brand-gray max-w-sm font-medium leading-relaxed">
+                L'intelligence passive qui unifie vos flux de communication pour libérer votre esprit et simplifier votre gestion freelance.
+              </p>
+              <div class="flex gap-4">
+                <a href="#" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all">
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all">
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.668-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4.162 4.162 0 110-8.324 4.162 4.162 0 010 8.324zM18.406 3.506a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="space-y-6">
+              <h4 class="font-bold text-brand-dark uppercase text-xs tracking-widest">Produit</h4>
+              <ul class="space-y-4">
+                <li><a href="#services" class="text-brand-gray hover:text-brand-primary transition-colors font-medium">Fonctionnalités</a></li>
+                <li><a href="#works" class="text-brand-gray hover:text-brand-primary transition-colors font-medium">Aperçu IA</a></li>
+                <li><a href="#pricing" class="text-brand-gray hover:text-brand-primary transition-colors font-medium">Tarifs</a></li>
+              </ul>
+            </div>
+            <div class="space-y-6">
+              <h4 class="font-bold text-brand-dark uppercase text-xs tracking-widest">Compagnie</h4>
+              <ul class="space-y-4">
+                <li><a href="#" class="text-brand-gray hover:text-brand-primary transition-colors font-medium">À propos</a></li>
+                <li><a href="#" class="text-brand-gray hover:text-brand-primary transition-colors font-medium">Blog</a></li>
+                <li><a href="#" class="text-brand-gray hover:text-brand-primary transition-colors font-medium">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-brand-gray text-sm font-medium">© 2026 Freescale AI. Tous droits réservés.</p>
+            <div class="flex gap-8">
+              <a href="#" class="text-brand-gray text-sm hover:text-brand-primary transition-colors">Politique de confidentialité</a>
+              <a href="#" class="text-brand-gray text-sm hover:text-brand-primary transition-colors">CGU</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-on-scroll-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('[data-animation-on-scroll]').forEach(el => {
+        el.classList.add('animate-on-scroll-hidden');
+        observer.observe(el);
+      });
+
+      // Add subtle parallax to the side gallery on scroll
+      window.addEventListener('scroll', () => {
+        const scrollPos = window.pageYOffset;
+        const galleryCols = document.querySelectorAll('.xl\\:flex.absolute');
+        galleryCols.forEach((col, index) => {
+          const speed = index === 0 ? 0.2 : 0.15;
+          col.style.transform = `translateY(${scrollPos * speed}px)`;
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue | Freescale Copilot</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Satoshi';
+            src: url('https://cdn.fontshare.com/wf/TTN6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Medium.woff2') format('woff2');
+            font-weight: 500;
+        }
+        @font-face {
+            font-family: 'Satoshi';
+            src: url('https://cdn.fontshare.com/wf/6ID6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Bold.woff2') format('woff2');
+            font-weight: 700;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body, #root { height: 100%; min-height: 100vh; }
+        body { font-family: 'Satoshi', 'Inter', sans-serif; background: #FAFAFA; color: #121212; overflow-x: hidden; }
+
+        /* Navigation */
+        .top-nav {
+            position: absolute; top: 0; left: 0; right: 0;
+            padding: 32px 48px; display: flex; align-items: center; justify-content: space-between;
+            z-index: 10;
+        }
+        .logo-group { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { width: 32px; height: 32px; background: #E34400; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 15px; }
+        .logo-text { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; }
+        .quit-btn { font-size: 13px; font-weight: 700; color: #9CA3AF; text-decoration: none; transition: color 0.2s; cursor: pointer; }
+        .quit-btn:hover { color: #121212; }
+
+        /* Container */
+        .wrapper {
+            position: relative; z-index: 1; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 80px 20px;
+        }
+
+        .card {
+            width: 100%; max-width: 540px;
+            background: white; border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
+            border-radius: 28px; padding: 48px;
+            animation: formIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes formIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Typography */
+        .title { font-size: 28px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 8px; text-align: center; }
+        .subtitle { font-size: 15px; color: #6B7280; font-weight: 500; text-align: center; margin-bottom: 32px; line-height: 1.5; }
+
+        /* Buttons */
+        .btn-group { display: flex; gap: 12px; margin-top: 32px; }
+        .btn-primary {
+            flex: 1; padding: 16px; background: #E34400; color: white;
+            font-size: 14px; font-weight: 900; border: none; border-radius: 12px; cursor: pointer;
+            box-shadow: 0 4px 14px rgba(227,68,0,0.2); transition: all 0.15s;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(227,68,0,0.25); }
+        .btn-primary:disabled { background: #E5E7EB; color: #9CA3AF; box-shadow: none; cursor: not-allowed; transform: none; }
+        .btn-secondary {
+            padding: 16px 24px; background: white; color: #121212;
+            font-size: 14px; font-weight: 800; border: 1.5px solid #E5E7EB; border-radius: 12px; cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-secondary:hover { border-color: #121212; }
+
+        /* STEP 1: Channels */
+        .ch-box {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; border: 1.5px solid #E5E7EB; border-radius: 16px;
+            background: white; cursor: pointer; transition: all 0.15s; margin-bottom: 12px;
+        }
+        .ch-box:hover { border-color: rgba(227,68,0,0.3); }
+        .ch-box.active { border-color: #10B981; background: rgba(16,185,129,0.03); }
+        .ch-left { display: flex; align-items: center; gap: 14px; }
+        .ch-icon { font-size: 22px; }
+        .ch-name { font-size: 15px; font-weight: 800; color: #121212; }
+        .ch-status { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 99px; }
+        .st-off { background: #F3F4F6; color: #6B7280; }
+        .st-on { background: rgba(16,185,129,0.1); color: #10B981; }
+
+        /* STEP 2: Mad-libs Phrase */
+        .mad-libs-container {
+            font-size: 24px; font-weight: 500; line-height: 1.8;
+            color: #374151; padding: 20px 0;
+            text-align: center;
+        }
+        .ml-input {
+            appearance: none; -webkit-appearance: none;
+            font-family: inherit; font-size: inherit; font-weight: 800;
+            color: #121212; text-align: center;
+            border: none; border-bottom: 2px solid #E5E7EB; background: transparent;
+            padding: 0 4px; margin: 0 8px; width: auto; min-width: 100px;
+            cursor: pointer; transition: border-color 0.2s;
+            outline: none;
+        }
+        .ml-input:focus, .ml-input:hover { border-color: #E34400; }
+        .ml-select-wrapper { position: relative; display: inline-block; margin: 0 8px; }
+        .ml-select {
+            appearance: none; -webkit-appearance: none;
+            font-family: inherit; font-size: inherit; font-weight: 800;
+            color: #121212; text-align: center;
+            border: none; border-bottom: 2px solid #E5E7EB; background: transparent;
+            padding: 0 24px 0 4px; cursor: pointer; transition: border-color 0.2s;
+            outline: none;
+        }
+        .ml-select:focus, .ml-select:hover { border-color: #E34400; }
+        .ml-caret { position: absolute; right: 4px; top: 50%; transform: translateY(-30%); font-size: 14px; color: #9CA3AF; pointer-events: none; }
+
+        /* STEP 3: Scan Results */
+        .scan-stats {
+            display: flex; background: white; border: 1px solid #E5E7EB;
+            border-radius: 16px; margin-bottom: 24px; overflow: hidden;
+        }
+        .scan-stat-box { flex: 1; padding: 20px; text-align: center; border-right: 1px solid #E5E7EB; }
+        .scan-stat-box:last-child { border-right: none; }
+        .sb-lbl { font-size: 10px; font-weight: 900; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+        .sb-val { font-size: 24px; font-weight: 900; color: #121212; font-variant-numeric: tabular-nums; }
+
+        .client-list {
+            border: 1px solid #E5E7EB; border-radius: 16px; background: white;
+            overflow: hidden;
+        }
+        .client-row {
+            display: flex; align-items: center; padding: 16px 20px;
+            border-bottom: 1px solid #E5E7EB; background: #FFF; transition: background 0.2s; cursor: pointer;
+        }
+        .client-row:hover { background: #F9FAFB; }
+        .client-row:last-child { border-bottom: none; }
+
+        .custom-checkbox {
+            width: 20px; height: 20px; border-radius: 6px; border: 2px solid #E34400;
+            background: #E34400; display: flex; align-items: center; justify-content: center;
+            margin-right: 16px; flex-shrink: 0;
+        }
+        .custom-checkbox.unchecked { background: transparent; border-color: #D1D5DB; }
+
+        .cr-avatar { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 14px; flex-shrink: 0; }
+        .cr-info { flex: 1; }
+        .cr-name { font-size: 14px; font-weight: 800; color: #121212; margin-bottom: 2px; }
+        .cr-chan { font-size: 12px; color: #6B7280; font-weight: 500; }
+        
+        .cr-msg-count { font-size: 11px; font-weight: 800; color: #9CA3AF; background: #F3F4F6; padding: 4px 10px; border-radius: 99px; }
+
+        .scan-footer { 
+            text-align: center; padding: 16px 20px; font-size: 13px; color: #E34400; font-weight: 700; 
+            background: rgba(227,68,0,0.03); display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .spinner { width: 14px; height: 14px; border: 2px solid rgba(227,68,0,0.2); border-top-color: #E34400; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const App = () => {
+    const [step, setStep] = useState(1);
+
+    // Step 1 state
+    const [connected, setConnected] = useState([]);
+    const toggleChannel = (id) => setConnected(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id]);
+
+    // Step 2 state
+    const [name, setName] = useState('Thomas');
+    const [job, setJob] = useState('Designer');
+    const [clientsCount, setClientsCount] = useState('4');
+
+    // Step 3 state
+    const [scanning, setScanning] = useState(true);
+    const [scanText, setScanText] = useState('Initialisation...');
+    const [msgCount, setMsgCount] = useState(0);
+    const [visibleClients, setVisibleClients] = useState(0);
+    const [selectedClients, setSelectedClients] = useState([1, 2, 3]);
+
+    const toggleClient = (id) => setSelectedClients(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id]);
+
+    useEffect(() => {
+        if (step === 3) {
+            setScanning(true);
+            setMsgCount(0);
+            setVisibleClients(0);
+            
+            // Dynamic scan phases based on connected tools
+            const tools = connected.length > 0 ? connected : ['whatsapp', 'gmail', 'slack']; // Fallback if bypassed
+            const toolNames = { 'whatsapp': 'WhatsApp', 'gmail': 'Gmail', 'slack': 'Slack' };
+            const phrases = tools.map((t, i) => i === 0 ? `Scan des conversations ${toolNames[t]} en cours...` : `Analyse experte de l'historique ${toolNames[t]}...`);
+            phrases.push("Croisement des données et détection des tâches...");
+            phrases.push("Terminé.");
+
+            let phaseIndex = 0;
+            let currentMsgs = 0;
+            const targetMsgs = 312;
+
+            setScanText(phrases[0]);
+
+            // Increment messages fast
+            const counterInt = setInterval(() => {
+                currentMsgs += Math.floor(Math.random() * 15) + 5;
+                if (currentMsgs >= targetMsgs) currentMsgs = targetMsgs;
+                setMsgCount(currentMsgs);
+            }, 80);
+
+            // Change phrases
+            const phraseInt = setInterval(() => {
+                phaseIndex++;
+                if (phaseIndex < phrases.length - 1) {
+                    setScanText(phrases[phaseIndex]);
+                }
+            }, 1200);
+
+            // Pop clients one by one
+            setTimeout(() => setVisibleClients(1), 800);
+            setTimeout(() => setVisibleClients(2), 1800);
+            setTimeout(() => setVisibleClients(3), 2600);
+
+            // Finish
+            const finishTimer = setTimeout(() => {
+                clearInterval(counterInt);
+                clearInterval(phraseInt);
+                setMsgCount(targetMsgs);
+                setScanText('Analyse terminée.');
+                setScanning(false);
+            }, 3600);
+
+            return () => { clearInterval(counterInt); clearInterval(phraseInt); clearTimeout(finishTimer); };
+        }
+    }, [step, connected]);
+
+    const clientsData = [
+        { id: 1, name: 'Marie Dupont', char: '👩🏽', chan: 'Email pro + Slack', count: 142 },
+        { id: 2, name: 'Thomas Richer', char: '👨🏻', chan: 'Multi-canal', count: 87 },
+        { id: 3, name: 'Sophie Laurent', char: '👱‍♀️', chan: '3 canaux + email', count: 83 },
+    ];
+
+    return (
+        <div className="wrapper">
+            <nav className="top-nav">
+                <div className="logo-group">
+                    <div className="logo-icon">f</div>
+                    <div className="logo-text">Freescale</div>
+                </div>
+                <div className="quit-btn" onClick={() => window.location.href = '/dashboard.html'}>Quitter</div>
+            </nav>
+
+            <div className="card">
+
+                {/* STEP 1: Channels */}
+                {step === 1 && (
+                    <div>
+                        <h1 className="title">Connectez vos canaux</h1>
+                        <p className="subtitle">Freescale unifie vos échanges de manière sécurisée.</p>
+
+                        <div className="ch-list">
+                            {[
+                                { id: 'whatsapp', name: 'WhatsApp Personnel', icon: '💬' },
+                                { id: 'gmail', name: 'Gmail Pro', icon: '✉️' },
+                                { id: 'slack', name: 'Slack Workspaces', icon: '🟣' }
+                            ].map(ch => (
+                                <div key={ch.id} className={`ch-box ${connected.includes(ch.id) ? 'active' : ''}`} onClick={() => toggleChannel(ch.id)}>
+                                    <div className="ch-left">
+                                        <div className="ch-icon">{ch.icon}</div>
+                                        <div className="ch-name">{ch.name}</div>
+                                    </div>
+                                    <div className={`ch-status ${connected.includes(ch.id) ? 'st-on' : 'st-off'}`}>
+                                        {connected.includes(ch.id) ? 'Connecté' : 'Associer'}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="btn-group">
+                            <button className="btn-primary" disabled={connected.length === 0} onClick={() => setStep(2)}>
+                                Continuer →
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+
+                {/* STEP 2: Mad-libs Phrase */}
+                {step === 2 && (
+                    <div>
+                        <h1 className="title">Faisons connaissance</h1>
+                        <p className="subtitle">Aidez Freescale à s'adapter à votre contexte.</p>
+
+                        <div className="mad-libs-container">
+                            Je m'appelle 
+                            <input 
+                                type="text" className="ml-input" 
+                                value={name} onChange={e => setName(e.target.value)}
+                                style={{ width: Math.max(name.length * 15, 60) + 'px' }}
+                            />.<br/>
+                            Je suis 
+                            <div className="ml-select-wrapper">
+                                <select className="ml-select" value={job} onChange={e => setJob(e.target.value)}>
+                                    <option>Designer</option>
+                                    <option>Développeur</option>
+                                    <option>Consultant</option>
+                                    <option>Marketeur</option>
+                                    <option>PM / PO</option>
+                                </select>
+                                <span className="ml-caret">v</span>
+                            </div>
+                            et je gère<br/> généralement 
+                            <div className="ml-select-wrapper">
+                                <select className="ml-select" value={clientsCount} onChange={e => setClientsCount(e.target.value)}>
+                                    <option>1 à 3</option>
+                                    <option>4</option>
+                                    <option>5 à 10</option>
+                                    <option>10+</option>
+                                </select>
+                                <span className="ml-caret">v</span>
+                            </div>
+                            clients actifs.
+                        </div>
+
+                        <div className="btn-group">
+                            <button className="btn-secondary" onClick={() => setStep(1)}>Retour</button>
+                            <button className="btn-primary" onClick={() => setStep(3)}>Lancer l'analyse</button>
+                        </div>
+                    </div>
+                )}
+
+
+                {/* STEP 3: Scan / Clients List */}
+                {step === 3 && (
+                    <div>
+                        <h1 className="title">{scanning ? 'Extraction en cours...' : 'Analyse terminée'}</h1>
+                        <p className="subtitle">
+                            {scanning ? 'Veuillez patienter pendant que l\'IA lit vos échanges.' : 'Vos clients ont été reconnus et organisés automatiquement.'}
+                        </p>
+
+                        <div className="scan-stats">
+                            <div className="scan-stat-box">
+                                <div className="sb-lbl">Messages lus</div>
+                                <div className="sb-val">{msgCount}</div>
+                            </div>
+                            <div className="scan-stat-box">
+                                <div className="sb-lbl">Clients détectés</div>
+                                <div className="sb-val">{visibleClients}</div>
+                            </div>
+                        </div>
+
+                        <div className="client-list">
+                            {clientsData.slice(0, visibleClients).map((c) => (
+                                <div key={c.id} className="client-row" onClick={() => toggleClient(c.id)}>
+                                    <div className={`custom-checkbox ${!selectedClients.includes(c.id) ? 'unchecked' : ''}`}>
+                                        {selectedClients.includes(c.id) && <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                                    </div>
+                                    <div className="cr-avatar" style={{ background: '#F3E8E0' }}>{c.char}</div>
+                                    <div className="cr-info">
+                                        <div className="cr-name">{c.name}</div>
+                                        <div className="cr-chan">{c.chan}</div>
+                                    </div>
+                                    <div className="cr-msg-count">
+                                        {scanning ? Math.floor(Math.random() * c.count) : c.count} msgs
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="scan-footer" style={{ color: scanning ? '#E34400' : '#10B981', background: scanning ? 'rgba(227,68,0,0.03)' : 'rgba(16,185,129,0.03)' }}>
+                                {scanning && <div className="spinner" />}
+                                {scanText}
+                            </div>
+                        </div>
+
+                        <div className="btn-group">
+                            <button className="btn-secondary" onClick={() => setStep(2)}>Retour</button>
+                            <button className="btn-primary" disabled={scanning || selectedClients.length === 0} onClick={() => setStep(4)}>
+                                {scanning ? 'Analyse en cours...' : `Continuer avec ${selectedClients.length} clients`}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* STEP 4: Value Proposition / Aha! Moment */}
+                {step === 4 && (
+                    <div style={{ animation: 'formIn 0.4s' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '20px', background: 'linear-gradient(135deg, #E34400 0%, #ff6b35 100%)', color: 'white', fontSize: '28px', boxShadow: '0 8px 16px rgba(227,68,0,0.25)' }}>
+                                ✨
+                            </div>
+                        </div>
+                        <h1 className="title" style={{ fontSize: '32px' }}>Votre Copilote est prêt</h1>
+                        <p className="subtitle" style={{ fontSize: '16px', color: '#121212', fontWeight: 600, maxWidth: '400px', margin: '0 auto 32px' }}>
+                            En scannant vos {msgCount} messages, Freescale a déjà travaillé pour vous :
+                        </p>
+
+                        <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '20px', padding: '28px', marginBottom: '32px' }}>
+                            <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', alignItems: 'flex-start' }}>
+                                <div style={{ background: 'rgba(227,68,0,0.1)', color: '#E34400', padding: '12px', borderRadius: '14px', fontSize: '20px', lineHeight: 1 }}>🗂️</div>
+                                <div>
+                                    <div style={{ fontWeight: 900, fontSize: '15px', color: '#121212' }}>Vos clients regroupés au même endroit</div>
+                                    <div style={{ fontSize: '13px', color: '#6B7280', marginTop: '4px', fontWeight: 500, lineHeight: 1.4 }}>{selectedClients.length} profils ont été créés automatiquement depuis vos {msgCount} messages.</div>
+                                </div>
+                            </div>
+                            
+                            <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', alignItems: 'flex-start' }}>
+                                <div style={{ background: 'rgba(16,185,129,0.1)', color: '#10B981', padding: '12px', borderRadius: '14px', fontSize: '20px', lineHeight: 1 }}>💬</div>
+                                <div>
+                                    <div style={{ fontWeight: 900, fontSize: '15px', color: '#121212' }}>Historique organisé</div>
+                                    <div style={{ fontSize: '13px', color: '#6B7280', marginTop: '4px', fontWeight: 500, lineHeight: 1.4 }}>Tous vos échanges clients passés sont maintenant unifiés (WhatsApp, Slack, Gmail).</div>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                                <div style={{ background: 'rgba(99,102,241,0.1)', color: '#6366F1', padding: '12px', borderRadius: '14px', fontSize: '20px', lineHeight: 1 }}>⚡️</div>
+                                <div>
+                                    <div style={{ fontWeight: 900, fontSize: '15px', color: '#121212' }}>Prêt pour l'analyse IA</div>
+                                    <div style={{ fontSize: '13px', color: '#6B7280', marginTop: '4px', fontWeight: 500, lineHeight: 1.4 }}>Passez sur votre Inbox pour laisser l'IA générer automatiquement vos tâches et opportunités depuis vos messages.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="btn-group">
+                            <button className="btn-primary" style={{ padding: '18px', fontSize: '15px' }} onClick={() => window.location.href = '/dashboard.html'}>
+                                Ouvrir mon espace de travail →
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+            </div>
+        </div>
+    );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
