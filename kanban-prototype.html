@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One-Click Kanban | Prototype Freescale</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { DEFAULT: '#E34400', dark: '#121212', light: '#FFF5F2' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; color: #121212; overflow-x: hidden; }
+        .card-enter { animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .card-leave { animation: slideOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes slideOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.95); } }
+        
+        /* Magic hover effect for AI cards */
+        .ai-card { transition: all 0.2s ease; border: 1.5px solid rgba(227,68,0,0.1); }
+        .ai-card:hover { border-color: #E34400; box-shadow: 0 10px 30px -10px rgba(227,68,0,0.15); transform: translateY(-2px); }
+        
+        .magic-btn { position: relative; overflow: hidden; }
+        .magic-btn::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg) translateX(-100%); transition: transform 0.5s;
+        }
+        .magic-btn:hover::after { transform: rotate(45deg) translateX(100%); }
+    </style>
+</head>
+<body class="h-screen flex flex-col">
+    
+    <div id="root" class="h-full flex flex-col"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const initialTasks = [
+            {
+                id: 1, column: 'ai-inbox', type: 'urgency', client: "Thomas (L'Oréal)", source: "Slack",
+                title: "Livrable Figma en attente",
+                context: "Tu avais promis d'envoyer les accès avant midi. Il est 14h.",
+                aiAction: "Envoyer le lien Figma avec un mot d'excuse",
+                timeSaved: 10
+            },
+            {
+                id: 2, column: 'ai-inbox', type: 'money', client: "Startup XYZ", source: "Gmail",
+                title: "Devis sans réponse depuis 5J",
+                context: "Le devis de 3,500€ a été ouvert mais pas signé.",
+                aiAction: "Générer une relance commerciale douce",
+                timeSaved: 15
+            },
+            {
+                id: 3, column: 'production', type: 'task', client: "Acme Corp", source: "Manuel",
+                title: "Coder la page d'accueil",
+                context: "La base de données est prête, besoin du front-end.",
+                aiAction: null,
+                timeSaved: 0
+            },
+            {
+                id: 4, column: 'client-pending', type: 'feedback', client: "Studio Design", source: "WhatsApp",
+                title: "Validation des assets",
+                context: "En attente du retour de Sarah sur les logos v2.",
+                aiAction: "Relancer Sarah pour valider",
+                timeSaved: 5
+            }
+        ];
+
+        const App = () => {
+            const [tasks, setTasks] = useState(initialTasks);
+            const [hoursSaved, setHoursSaved] = useState(4.5);
+            const [actionFlash, setActionFlash] = useState(null); // Used to flash floating text
+
+            const resolveWithAI = (task) => {
+                // Flash animation
+                setActionFlash({ id: task.id, text: `+${task.timeSaved} min récupérées !` });
+                
+                // Update KPI
+                setHoursSaved(prev => +(prev + (task.timeSaved / 60)).toFixed(1));
+
+                // Move task to 'client-pending' or 'done' based on context
+                setTimeout(() => {
+                    setTasks(tasks.map(t => 
+                        t.id === task.id ? { ...t, column: 'client-pending', resolvedByAI: true } : t
+                    ));
+                    setActionFlash(null);
+                }, 600);
+            };
+
+            const columns = [
+                { id: 'ai-inbox', title: '🎯 Copilote (Urgences IA)', icon: '⚡️', desc: 'Actions anticipées à valider en 1 clic' },
+                { id: 'production', title: '🛠 Mon Travail (Deep Work)', icon: '🧠', desc: 'Ce qui nécessite vraiment mon cerveau' },
+                { id: 'client-pending', title: '⏳ Bottleneck Client', icon: '🎾', desc: 'La balle est dans leur camp' }
+            ];
+
+            return (
+                <div className="flex flex-col h-full bg-gray-50">
+                    
+                    {/* Header & KPIs */}
+                    <div className="bg-white border-b border-gray-200 px-8 py-5 flex justify-between items-center z-10">
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center text-white font-bold text-lg">f</div>
+                            <span className="font-bold text-gray-900 text-lg tracking-tight">Espace de Production</span>
+                        </div>
+                        
+                        {/* KPI Dashboard Highlights */}
+                        <div className="flex gap-4">
+                            <div className="bg-white border border-gray-100 rounded-xl px-4 py-2 flex items-center gap-3 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+                                <div className="p-2 bg-orange-50 text-brand rounded-lg">⏱</div>
+                                <div>
+                                    <div className="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Temps récupéré</div>
+                                    <div className="font-black text-gray-900 text-lg leading-tight flex items-center gap-2">
+                                        {hoursSaved} heures <span className="text-xs text-green-500 font-semibold bg-green-50 px-1.5 py-0.5 rounded">cette sem.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="bg-white border border-gray-100 rounded-xl px-4 py-2 flex items-center gap-3 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+                                <div className="p-2 bg-green-50 text-green-600 rounded-lg">💰</div>
+                                <div>
+                                    <div className="text-[11px] text-gray-400 font-bold uppercase tracking-wider">CA Débloqué par l'IA</div>
+                                    <div className="font-black text-gray-900 text-lg leading-tight">3,500 €</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Value Prop Banner */}
+                    <div className="bg-brand/5 border-b border-brand/10 px-8 py-3 flex items-center justify-center gap-3 text-sm font-medium text-brand-dark">
+                        <span className="animate-pulse">💡</span> <strong>L'Action Principale :</strong> Ton seul travail en ouvrant cette page est de vider la colonne "Copilote" d'un simple clic pour retourner produire.
+                    </div>
+
+                    {/* Kanban Board */}
+                    <div className="flex-1 overflow-x-auto p-8 flex gap-6 h-full items-start">
+                        {columns.map(col => {
+                            const colTasks = tasks.filter(t => t.column === col.id);
+                            const isAIInbox = col.id === 'ai-inbox';
+                            
+                            return (
+                                <div key={col.id} className="flex-shrink-0 w-[400px] flex flex-col max-h-full">
+                                    
+                                    {/* Column Header */}
+                                    <div className="mb-4">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="text-xl">{col.icon}</span>
+                                            <h2 className="font-bold text-gray-900 text-[15px] tracking-tight">{col.title}</h2>
+                                            <span className="ml-auto bg-gray-200 text-gray-600 font-bold text-xs px-2 py-0.5 rounded-full">{colTasks.length}</span>
+                                        </div>
+                                        <p className="text-[12px] text-gray-500">{col.desc}</p>
+                                    </div>
+
+                                    {/* Column Body */}
+                                    <div className={`flex-1 overflow-y-auto space-y-4 pb-10 ${isAIInbox ? 'bg-orange-50/30 rounded-2xl p-2 border border-orange-100/50' : 'p-1'}`}>
+                                        
+                                        {colTasks.length === 0 && (
+                                            <div className="h-32 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center text-sm text-gray-400 font-medium">
+                                                Aucune action ici.
+                                            </div>
+                                        )}
+
+                                        {colTasks.map(task => (
+                                            <div key={task.id} className={`relative bg-white rounded-xl p-5 shadow-sm file-in ${isAIInbox ? 'ai-card' : 'border border-gray-100'}`}>
+                                                
+                                                {/* Floating Flash Animation */}
+                                                {actionFlash?.id === task.id && (
+                                                    <div className="absolute inset-0 bg-white/90 z-20 flex items-center justify-center rounded-xl backdrop-blur-sm card-enter">
+                                                        <span className="font-black text-brand text-lg animate-bounce">{actionFlash.text}</span>
+                                                    </div>
+                                                )}
+
+                                                <div className="flex justify-between items-start mb-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="w-5 h-5 bg-gray-100 rounded flex items-center justify-center text-[10px]">{task.source === 'Slack' ? '🟣' : task.source === 'Gmail' ? '✉️' : '💬'}</span>
+                                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">{task.client}</span>
+                                                    </div>
+                                                    {task.type === 'urgency' && <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>}
+                                                    {task.type === 'money' && <span className="w-2 h-2 bg-green-500 rounded-full"></span>}
+                                                </div>
+
+                                                <h3 className="font-bold text-gray-900 text-[15px] mb-1.5 leading-tight">{task.title}</h3>
+                                                <p className="text-[13px] text-gray-500 leading-relaxed mb-4 line-clamp-2">{task.context}</p>
+
+                                                {/* CORE ACTION: ONE-CLICK RESOLVE (Only in AI Inbox) */}
+                                                {isAIInbox && (
+                                                    <div className="mt-4 pt-4 border-t border-gray-100">
+                                                        <div className="text-[10px] font-bold text-brand uppercase tracking-widest mb-2 flex items-center gap-1">
+                                                            <span>✨</span> Solution prémâchée
+                                                        </div>
+                                                        <button 
+                                                            onClick={() => resolveWithAI(task)}
+                                                            className="magic-btn w-full bg-brand text-white font-semibold text-[13px] py-2.5 rounded-lg shadow-sm flex items-center justify-center gap-2">
+                                                            {task.aiAction}
+                                                        </button>
+                                                    </div>
+                                                )}
+
+                                                {/* Normal Action (If in Production/Done) */}
+                                                {!isAIInbox && !task.resolvedByAI && (
+                                                    <button className="w-full mt-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold text-[13px] py-2.5 rounded-lg border border-gray-200 transition-colors">
+                                                        Marquer comme fait
+                                                    </button>
+                                                )}
+
+                                                {/* Badge if resolved by AI */}
+                                                {task.resolvedByAI && (
+                                                    <div className="mt-3 bg-green-50 text-green-700 text-[11px] font-bold px-3 py-1.5 rounded-md flex items-center gap-2">
+                                                        <span>✓</span> Géré par l'IA (En attente du client)
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        ))}
+
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            )
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
