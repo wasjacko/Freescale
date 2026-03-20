@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LRSRE4M9M2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LRSRE4M9M2');
+  </script>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -14,6 +23,8 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Add Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -74,12 +85,25 @@
     <div id="root" class="w-full max-w-[440px]"></div>
 
     <script type="text/babel">
+        // --- Configuration Supabase ---
+        const { createClient } = window.supabase;
+        const supabaseUrl = 'https://niyoruzbfvaamrcpldal.supabase.co';
+        const supabaseKey = 'sb_publishable_91BPPwNnFtc93N59kfIuoQ_CcWIg3TW';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
         const { useState } = React;
 
         const App = () => {
             const [step, setStep] = useState(1);
             const [tools, setTools] = useState([]);
             const [isScanning, setIsScanning] = useState(false);
+            const [authError, setAuthError] = useState("");
+            
+            // Form state for Sign up
+            const [firstName, setFirstName] = useState("");
+            const [email, setEmail] = useState("");
+            const [password, setPassword] = useState("");
+            const [userId, setUserId] = useState(null);
             
             // State for manual client entry
             const [clientInput, setClientInput] = useState("");
@@ -103,9 +127,54 @@
                 setClients(clients.filter(c => c.id !== id));
             };
 
-            const startScan = () => {
+            const handleSignUp = async (e) => {
+                e.preventDefault();
+                setAuthError("");
+                
+                // Call Supabase to create user
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { first_name: firstName } }
+                });
+
+                if (error) {
+                    setAuthError(error.message);
+                    return;
+                }
+                
+                // Whether email confirmation is disabled or enabled, we try to proceed to next step
+                if (data.user) {
+                    setUserId(data.user.id);
+                }
+                setStep(2);
+            };
+
+            const startScan = async () => {
                 setStep(4);
                 setIsScanning(true);
+                
+                // If we have a logged-in user, insert clients to DB
+                if (clients.length > 0) {
+                    // Try to get current user ID if not set locally
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const currentUserId = userId || (user ? user.id : null);
+                    
+                    if (currentUserId) {
+                        const clientsToInsert = clients.map(c => ({
+                            user_id: currentUserId,
+                            name: c.name
+                        }));
+                        
+                        const { error } = await supabase.from('clients').insert(clientsToInsert);
+                        if (error) {
+                            console.error("Erreur lors de la sauvegarde des clients:", error);
+                        }
+                    } else {
+                        console.warn("Utilisateur non connecté, impossible d'insérer en base de données.");
+                    }
+                }
+
                 setTimeout(() => {
                     setIsScanning(false);
                 }, 1500);
@@ -125,18 +194,24 @@
                             <div className="fade-in">
                                 <h1 className="text-[22px] font-bold text-center text-gray-900 mb-8 tracking-tight">Créez votre compte</h1>
 
-                                <form onSubmit={(e) => { e.preventDefault(); setStep(2); }} className="space-y-4">
+                                {authError && (
+                                    <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl">
+                                        {authError}
+                                    </div>
+                                )}
+
+                                <form onSubmit={handleSignUp} className="space-y-4">
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-600 mb-1.5 ml-1">Prénom</label>
-                                        <input type="text" required placeholder="Thomas" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors" />
+                                        <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required placeholder="Thomas" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors" />
                                     </div>
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-600 mb-1.5 ml-1">Email professionnel</label>
-                                        <input type="email" required placeholder="thomas@freelance.com" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors" />
+                                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="thomas@freelance.com" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors" />
                                     </div>
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-600 mb-1.5 ml-1">Mot de passe</label>
-                                        <input type="password" required placeholder="••••••••" minLength="6" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors" />
+                                        <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" minLength="6" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors" />
                                     </div>
                                     
                                     <button type="submit" className="w-full bg-brand text-white font-semibold py-3.5 rounded-xl hover:bg-orange-600 transition-colors mt-4 shadow-[0_4px_14px_rgba(227,68,0,0.2)]">
