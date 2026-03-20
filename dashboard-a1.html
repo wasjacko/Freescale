@@ -119,11 +119,17 @@
         .app-btn:hover { border-color: #E34400; box-shadow: 0 4px 12px rgba(227,68,0,0.05); }
         .app-icon { font-size: 32px; }
         .app-name { font-size: 14px; font-weight: 700; color: #121212; }
+        .btn-ai-discrete { 
+            background: transparent; color: #6B7280; border: 1px solid #E5E7EB; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; 
+            cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+            margin-bottom: 8px; align-self: flex-start;
+        }
+        .btn-ai-discrete:hover { border-color: #E34400; color: #E34400; background: #FFF8F5; }
+        .btn-ai-success { background: #F0FDF4; color: #10B981; border: 1px solid #BBF7D0; }
 
-        .btn-close { position: absolute; top: 16px; right: 16px; background: #F3F4F6; border: none; width: 32px; height: 32px; border-radius: 50%; font-weight: 800; cursor: pointer; color: #6B7280; }
-        .btn-close:hover { background: #E5E7EB; color: #121212; }
-
+        .spinner-mini { width: 14px; height: 14px; border: 2px solid rgba(0,0,0,0.1); border-top-color: currentColor; border-radius: 50%; animation: spin 0.8s linear infinite; }
         .spinner { width: 32px; height: 32px; border: 3px solid rgba(227,68,0,0.1); border-top-color: #E34400; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 24px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -145,6 +151,8 @@
             const [activeChat, setActiveChat] = useState(null);
             const [showModal, setShowModal] = useState(false);
             const [connStep, setConnStep] = useState(1);
+            const [isExtracting, setIsExtracting] = useState(false);
+            const [showSuccess, setShowSuccess] = useState(false);
             const msgsEndRef = useRef(null);
 
             useEffect(() => { msgsEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [activeChat]);
@@ -152,6 +160,16 @@
             const simulateConnect = () => {
                 setConnStep(2);
                 setTimeout(() => setConnStep(3), 1500);
+            };
+
+            const extractTasks = () => {
+                if (isExtracting) return;
+                setIsExtracting(true);
+                setTimeout(() => {
+                    setIsExtracting(false);
+                    setShowSuccess(true);
+                    setTimeout(() => setShowSuccess(false), 5000);
+                }, 2000);
             };
 
             return (
@@ -164,6 +182,10 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path></svg>
                                 Boîte de Réception
                             </div>
+                            <a className="nav-item" href="/clients.html">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                CRM & Clients
+                            </a>
                         </nav>
 
                         <div className="integrations">
@@ -221,7 +243,22 @@
                                 ))}
                                 <div ref={msgsEndRef} />
                             </div>
-                            <div className="chat-input"><div className="input-box"><input type="text" placeholder={`Parler dans ${activeChat.platform}...`} /><button className="btn-send">→</button></div></div>
+                            <div className="chat-input">
+                                {showSuccess ? (
+                                    <button className="btn-ai-discrete btn-ai-success" onClick={() => window.location.href='/clients.html'}>
+                                        ✅ 3 tâches créées ! <span style={{ textDecoration: 'underline', marginLeft: 4 }}>Voir CRM</span>
+                                    </button>
+                                ) : (
+                                    <button className="btn-ai-discrete" onClick={extractTasks} disabled={isExtracting}>
+                                        {isExtracting ? <div className="spinner-mini"></div> : '✨'} 
+                                        {isExtracting ? 'Analyse...' : 'Extraire les tâches'}
+                                    </button>
+                                )}
+                                <div className="input-box">
+                                    <input type="text" placeholder={`Parler dans ${activeChat.platform}...`} />
+                                    <button className="btn-send">→</button>
+                                </div>
+                            </div>
                         </main>
                     ) : (
                         <main className="empty-main" style={{ padding: '60px 80px', alignItems: 'flex-start', justifyContent: 'flex-start', overflowY: 'auto' }}>

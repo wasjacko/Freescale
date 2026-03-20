@@ -19,49 +19,28 @@
     <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inbox | Freescale Copilot</title>
+    <title>Inbox A1 | Freescale Copilot</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        @font-face { font-family: 'Satoshi'; src: url('https://cdn.fontshare.com/wf/TTN6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Medium.woff2') format('woff2'); font-weight: 500; }
+        @font-face { font-family: 'Satoshi'; src: url('https://cdn.fontshare.com/wf/6ID6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Bold.woff2') format('woff2'); font-weight: 700; }
+        @font-face { font-family: 'Satoshi'; src: url('https://cdn.fontshare.com/wf/7IQ6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Black.woff2') format('woff2'); font-weight: 900; }
 
-        @font-face {
-            font-family: 'Satoshi';
-            src: url('https://cdn.fontshare.com/wf/TTN6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Medium.woff2') format('woff2');
-            font-weight: 500;
-        }
-        @font-face {
-            font-family: 'Satoshi';
-            src: url('https://cdn.fontshare.com/wf/6ID6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Bold.woff2') format('woff2');
-            font-weight: 700;
-        }
-        @font-face {
-            font-family: 'Satoshi';
-            src: url('https://cdn.fontshare.com/wf/7IQ6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Black.woff2') format('woff2');
-            font-weight: 900;
-        }
-
-        body, html, #root {
-            height: 100%; width: 100%; overflow: hidden;
-            font-family: 'Satoshi', 'Inter', sans-serif;
-            background: #FFFFFF; color: #121212;
-        }
-
-        .layout { display: flex; height: 100vh; }
+        body, html, #root { height: 100%; width: 100%; overflow: hidden; font-family: 'Satoshi', 'Inter', sans-serif; background: #FFFFFF; color: #121212; }
+        .layout { display: flex; height: 100vh; position: relative; }
 
         /* ---- SIDEBAR ---- */
-        .sidebar {
-            width: 240px; min-width: 240px; border-right: 1px solid #E5E7EB;
-            background: #F9FAFB; display: flex; flex-direction: column;
-        }
+        .sidebar { width: 240px; min-width: 240px; border-right: 1px solid #E5E7EB; background: #F9FAFB; display: flex; flex-direction: column; }
         .logo { padding: 24px; font-weight: 900; font-size: 18px; display: flex; gap: 8px; align-items: center; letter-spacing: -0.3px; }
         .logo-box { width: 28px; height: 28px; background: #E34400; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 14px; }
         
         .nav { padding: 0 12px; }
-        .nav-item { padding: 10px 12px; border-radius: 10px; font-weight: 700; color: #6B7280; font-size: 14px; cursor: pointer; display: flex; gap: 10px; align-items: center; margin-bottom: 4px; transition: all 0.15s; }
+        .nav-item { padding: 10px 12px; border-radius: 10px; font-weight: 700; color: #6B7280; font-size: 14px; cursor: pointer; display: flex; gap: 10px; align-items: center; margin-bottom: 4px; transition: all 0.15s; text-decoration: none; }
         .nav-item:hover { color: #121212; }
         .nav-item.active { background: rgba(227,68,0,0.06); color: #E34400; }
         .nav-item svg { width: 16px; height: 16px; }
@@ -75,40 +54,33 @@
         .int-on { background: #10B981; }
         .int-off { background: #E5E7EB; }
         
-        .btn-connect { border: 1px dashed #D1D5DB; background: transparent; padding: 10px; width: 100%; border-radius: 8px; font-size: 12px; font-weight: 800; color: #6B7280; margin-top: 16px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-connect:hover { border-color: #9CA3AF; color: #121212; background: white; }
+        /* A1 MODIFIED BUTTON (NOIR + SHADOW) */
+        .btn-connect-a1 { border: none; background: #121212; padding: 12px; width: 100%; border-radius: 10px; font-size: 13px; font-weight: 800; color: white; margin-top: 16px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .btn-connect-a1:hover { opacity: 0.9; transform: translateY(-1px); }
 
         /* ---- INBOX LIST ---- */
-        .inbox-list {
-            width: 320px; min-width: 320px; border-right: 1px solid #E5E7EB;
-            display: flex; flex-direction: column; background: white;
-        }
+        .inbox-list { width: 320px; min-width: 320px; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; background: white; }
         .il-header { padding: 24px; font-size: 18px; font-weight: 900; border-bottom: 1px solid #E5E7EB; letter-spacing: -0.3px; display: flex; justify-content: space-between; align-items: center; }
         .il-counter { font-size: 12px; background: #F3F4F6; padding: 2px 8px; border-radius: 99px; color: #6B7280; font-weight: 700; }
         
         .chat-row { padding: 16px 20px; border-bottom: 1px solid #F3F4F6; cursor: pointer; transition: background 0.15s; display: flex; gap: 12px; position: relative; }
         .chat-row:hover { background: #F9FAFB; }
         .chat-row.active { background: #F9FAFB; border-left: 3px solid #E34400; padding-left: 17px; }
-        
         .cr-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
         .cr-content { flex: 1; min-width: 0; }
         .cr-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
         .cr-name { font-weight: 800; font-size: 14px; color: #121212; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .cr-time { font-size: 11px; color: #9CA3AF; font-weight: 600; flex-shrink: 0; }
         .cr-msg { font-size: 13px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
-        
         .cr-platform { position: absolute; bottom: 12px; right: 20px; font-size: 12px; }
         .unread-dot { width: 8px; height: 8px; background: #E34400; border-radius: 50%; position: absolute; top: 22px; right: 20px; }
 
         /* ---- CHAT VIEW ---- */
-        .chat-view {
-            flex: 1; display: flex; flex-direction: column; background: white; min-width: 0;
-        }
+        .chat-view { flex: 1; display: flex; flex-direction: column; background: white; min-width: 0; }
         .cv-header { padding: 20px 32px; border-bottom: 1px solid #E5E7EB; display: flex; gap: 14px; align-items: center; }
         .cv-title { font-size: 16px; font-weight: 900; letter-spacing: -0.2px; }
         .cv-platform { font-size: 11px; font-weight: 800; padding: 4px 10px; background: #F3F4F6; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; color: #6B7280; }
 
-        /* AI Banner inside chat */
         .ai-banner { margin: 24px 32px 0; padding: 18px 24px; background: #FFF8F5; border: 1px solid rgba(227,68,0,0.15); border-radius: 16px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
         .ai-title { font-size: 11px; font-weight: 900; color: #E34400; text-transform: uppercase; letter-spacing: 0.08em; display: flex; gap: 6px; align-items: center; }
         .ai-text { font-size: 15px; font-weight: 800; color: #121212; line-height: 1.4; }
@@ -116,30 +88,48 @@
         .btn-ai { background: white; border: 1px solid rgba(227,68,0,0.2); padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; color: #E34400; cursor: pointer; transition: all 0.15s; }
         .btn-ai:hover { background: #E34400; color: white; }
 
-        /* Messages */
         .messages-area { flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
         .msg-wrap { display: flex; flex-direction: column; max-width: 65%; }
         .msg-wrap.in { align-self: flex-start; }
         .msg-wrap.out { align-self: flex-end; align-items: flex-end; }
-        
         .msg { padding: 14px 18px; border-radius: 18px; font-size: 14px; font-weight: 500; line-height: 1.5; }
         .msg.in { background: #F3F4F6; color: #121212; border-bottom-left-radius: 4px; }
         .msg.out { background: #121212; color: white; border-bottom-right-radius: 4px; }
         .msg-time { font-size: 11px; color: #9CA3AF; margin-top: 6px; font-weight: 600; }
         
-        /* Chat Input */
         .chat-input { padding: 24px 32px; border-top: 1px solid #E5E7EB; }
         .input-box { display: flex; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 14px; padding: 6px; transition: border 0.2s; }
         .input-box:focus-within { border-color: rgba(227,68,0,0.4); background: white; }
         .input-box input { flex: 1; border: none; background: transparent; padding: 12px 14px; font-size: 14px; font-weight: 500; outline: none; color: #121212; }
-        .btn-send { width: 40px; height: 40px; background: #121212; color: white; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; }
-        .btn-send:hover { transform: scale(1.05); }
+        .btn-send { width: 40px; height: 40px; background: #121212; color: white; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* Empty State */
         .empty-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #FAFAFA; }
-        .empty-icon { font-size: 40px; margin-bottom: 20px; }
-        .empty-title { font-size: 20px; font-weight: 900; letter-spacing: -0.3px; margin-bottom: 8px; }
-        .empty-sub { font-size: 14px; color: #6B7280; font-weight: 500; }
+
+        /* MODAL STYLES */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 999; display: flex; align-items: center; justify-content: center; opacity: 0; animation: fadeInModal 0.2s forwards; }
+        .modal-box { background: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 480px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); transform: scale(0.95); animation: popModal 0.3s cubic-bezier(0.16,1,0.3,1) forwards; text-align: center; position: relative; }
+        @keyframes fadeInModal { to { opacity: 1; } }
+        @keyframes popModal { to { transform: scale(1); } }
+        
+        .modal-title { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; color: #121212; }
+        .modal-desc { font-size: 14px; color: #6B7280; margin-bottom: 32px; line-height: 1.5; }
+        
+        .grid-apps { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .app-btn { background: white; border: 2px solid #F3F4F6; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; }
+        .app-btn:hover { border-color: #E34400; box-shadow: 0 4px 12px rgba(227,68,0,0.05); }
+        .app-icon { font-size: 32px; }
+        .app-name { font-size: 14px; font-weight: 700; color: #121212; }
+        .btn-ai-discrete { 
+            background: transparent; color: #6B7280; border: 1px solid #E5E7EB; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; 
+            cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+            margin-bottom: 8px; align-self: flex-start;
+        }
+        .btn-ai-discrete:hover { border-color: #E34400; color: #E34400; background: #FFF8F5; }
+        .btn-ai-success { background: #F0FDF4; color: #10B981; border: 1px solid #BBF7D0; }
+
+        .spinner-mini { width: 14px; height: 14px; border: 2px solid rgba(0,0,0,0.1); border-top-color: currentColor; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .spinner { width: 32px; height: 32px; border: 3px solid rgba(227,68,0,0.1); border-top-color: #E34400; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 24px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -153,97 +143,59 @@
         const { useState, useEffect, useRef } = React;
 
         const chatsData = [
-            {
-                id: 1, name: 'Thomas Martin', platform: 'Slack', platformIcon: '🟣',
-                avatar: 'https://i.pravatar.cc/150?u=thomas', time: '11:42',
-                lastMsg: 'Tu peux m\'envoyer les fichiers Figma ?',
-                unread: true,
-                aiInsight: {
-                    type: 'Micro-engagement oublié',
-                    text: 'Hier, tu as promis d\'envoyer le lien Figma ce matin à la première heure.',
-                    action: '🪄 Générer un lien et répondre',
-                    icon: '🎯'
-                },
-                messages: [
-                    { dir: 'in', text: 'On fait le point sur la sprint review à 14h ?', time: 'Hier 16:00' },
-                    { dir: 'out', text: 'Ça marche, je te prépare le lien Figma ce soir ou demain matin à la première heure.', time: 'Hier 16:05' },
-                    { dir: 'in', text: 'Tu peux m\'envoyer les fichiers Figma ? J\'en ai besoin pour le dev.', time: 'Aujourd\'hui 11:42' },
-                ]
-            },
-            {
-                id: 2, name: 'Nadine Dupont', platform: 'WhatsApp', platformIcon: '💬',
-                avatar: 'https://i.pravatar.cc/150?u=nadine', time: 'Hier',
-                lastMsg: 'Ok pour le devis de 1200€ !',
-                unread: false,
-                aiInsight: {
-                    type: 'Friction Administrative',
-                    text: 'Le devis est validé, mais la facture d\'acompte (30%) n\'a pas encore été envoyée.',
-                    action: '🪄 Rédiger l\'email d\'acompte',
-                    icon: '💸'
-                },
-                messages: [
-                    { dir: 'out', text: 'Salut Nadine, voici la proposition chiffrée suite à notre appel (1200€ HT).', time: 'Il y a 2j' },
-                    { dir: 'in', text: 'Bien reçu, je regarde avec l\'équipe ce matin.', time: 'Hier 09:30' },
-                    { dir: 'in', text: 'Ok pour le devis de 1200€ ! On peut démarrer lundi.', time: 'Hier 14:15' },
-                ]
-            },
-            {
-                id: 3, name: 'Sophie Morel', platform: 'Gmail', platformIcon: '✉️',
-                avatar: 'https://i.pravatar.cc/150?u=sophie', time: 'Lundi',
-                lastMsg: 'Facture bien payée. Merci pour tout.',
-                unread: false,
-                aiInsight: null, // No specific action needed
-                messages: [
-                    { dir: 'out', text: 'Bonjour Sophie, voici la facture #0042 pour la mission stratégie.', time: 'Semaine dernière' },
-                    { dir: 'in', text: 'Facture bien payée. Merci pour tout, à bientôt !', time: 'Lundi 10:00' },
-                ]
-            }
+            { id: 1, name: 'Thomas Martin', platform: 'Slack', platformIcon: '🟣', avatar: 'https://i.pravatar.cc/150?u=thomas', time: '11:42', lastMsg: 'Tu peux m\'envoyer les fichiers Figma ?', unread: true, aiInsight: { type: 'Micro-engagement oublié', text: 'Hier, tu as promis d\'envoyer le lien Figma ce matin à la première heure.', action: '🪄 Générer un lien et répondre', icon: '🎯' }, messages: [ { dir: 'in', text: 'Tu peux m\'envoyer les fichiers Figma ?', time: '11:42' }] },
+            { id: 2, name: 'Nadine Dupont', platform: 'WhatsApp', platformIcon: '💬', avatar: 'https://i.pravatar.cc/150?u=nadine', time: 'Hier', lastMsg: 'Ok pour le devis de 1200€ !', unread: false, aiInsight: { type: 'Friction Administrative', text: 'Le devis est validé, mais la facture n\'est pas envoyée.', action: '🪄 Rédiger l\'email', icon: '💸' }, messages: [] }
         ];
 
         const App = () => {
             const [activeChat, setActiveChat] = useState(null);
+            const [showModal, setShowModal] = useState(false);
+            const [connStep, setConnStep] = useState(1);
+            const [isExtracting, setIsExtracting] = useState(false);
+            const [showSuccess, setShowSuccess] = useState(false);
             const msgsEndRef = useRef(null);
 
-            useEffect(() => {
-                msgsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, [activeChat]);
+            useEffect(() => { msgsEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [activeChat]);
+
+            const simulateConnect = () => {
+                setConnStep(2);
+                setTimeout(() => setConnStep(3), 1500);
+            };
+
+            const extractTasks = () => {
+                if (isExtracting) return;
+                setIsExtracting(true);
+                setTimeout(() => {
+                    setIsExtracting(false);
+                    setShowSuccess(true);
+                    setTimeout(() => setShowSuccess(false), 5000);
+                }, 2000);
+            };
 
             return (
                 <div className="layout">
                     {/* SIDEBAR */}
                     <aside className="sidebar">
-                        <div className="logo">
-                            <div className="logo-box">f</div>
-                            <span>Freescale</span>
-                        </div>
-
+                        <div className="logo"><div className="logo-box">f</div>Freescale</div>
                         <nav className="nav">
-                            <a className="nav-item active" href="#">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            <div className="nav-item active" onClick={() => setActiveChat(null)}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path></svg>
                                 Boîte de Réception
-                            </a>
+                            </div>
                             <a className="nav-item" href="/clients.html">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 CRM & Clients
                             </a>
                         </nav>
 
                         <div className="integrations">
                             <div className="int-title">Sources de données</div>
-                            <div className="int-item">
-                                <div className="int-group"><span className="int-icon">✉️</span> Gmail</div>
-                                <div className="int-status int-on"></div>
-                            </div>
-                            <div className="int-item">
-                                <div className="int-group"><span className="int-icon">🟣</span> Slack</div>
-                                <div className="int-status int-on"></div>
-                            </div>
-                            <div className="int-item" style={{ opacity: 0.5 }}>
-                                <div className="int-group"><span className="int-icon">💬</span> WhatsApp</div>
-                                <div className="int-status int-off"></div>
-                            </div>
-                            <button className="btn-connect">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <div className="int-item"><div className="int-group"><span className="int-icon">✉️</span> Gmail</div><div className="int-status int-on"></div></div>
+                            <div className="int-item"><div className="int-group"><span className="int-icon">🟣</span> Slack</div><div className="int-status int-on"></div></div>
+                            
+                            {/* THE A1 BLACK BUTTON AND ITS ONCLICK */}
+                            <button className="btn-connect-a1" onClick={() => { setShowModal(true); setConnStep(1); }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 Connecter un outil
                             </button>
                         </div>
@@ -251,30 +203,23 @@
 
                     {/* INBOX LIST */}
                     <aside className="inbox-list">
-                        <div className="il-header">
-                            Messages
-                            <span className="il-counter">3 unifiés</span>
-                        </div>
-                        
+                        <div className="il-header">Messages <span className="il-counter">2 unifiés</span></div>
                         <div className="il-content">
-                            {chatsData.map(chat => (
-                                <div key={chat.id} className={`chat-row ${activeChat?.id === chat.id ? 'active' : ''}`} onClick={() => setActiveChat(chat)}>
-                                    <img src={chat.avatar} alt={chat.name} className="cr-avatar"/>
+                            {chatsData.map(c => (
+                                <div key={c.id} className={`chat-row ${activeChat?.id === c.id ? 'active' : ''}`} onClick={() => setActiveChat(c)}>
+                                    <img src={c.avatar} className="cr-avatar"/>
                                     <div className="cr-content">
-                                        <div className="cr-top">
-                                            <span className="cr-name">{chat.name}</span>
-                                            <span className="cr-time">{chat.time}</span>
-                                        </div>
-                                        <div className="cr-msg">{chat.lastMsg}</div>
+                                        <div className="cr-top"><span className="cr-name">{c.name}</span><span className="cr-time">{c.time}</span></div>
+                                        <div className="cr-msg">{c.lastMsg}</div>
                                     </div>
-                                    <div className="cr-platform">{chat.platformIcon}</div>
-                                    {chat.unread && <div className="unread-dot" />}
+                                    <div className="cr-platform">{c.platformIcon}</div>
+                                    {c.unread && <div className="unread-dot" />}
                                 </div>
                             ))}
                         </div>
                     </aside>
 
-                    {/* CHAT VIEW */}
+                    {/* CHAT VIEW (EXACT MATCH of BASE DASHBOARD) */}
                     {activeChat ? (
                         <main className="chat-view">
                             <div className="cv-header">
@@ -282,21 +227,13 @@
                                 <div className="cv-title">{activeChat.name}</div>
                                 <div className="cv-platform">{activeChat.platform}</div>
                             </div>
-
-                            {/* ZERO-SETUP AI BANNER directly in context */}
                             {activeChat.aiInsight && (
                                 <div className="ai-banner">
-                                    <div className="ai-title">
-                                        <span>{activeChat.aiInsight.icon}</span> {activeChat.aiInsight.type}
-                                    </div>
+                                    <div className="ai-title"><span>{activeChat.aiInsight.icon}</span> {activeChat.aiInsight.type}</div>
                                     <div className="ai-text">{activeChat.aiInsight.text}</div>
-                                    <div className="ai-actions">
-                                        <button className="btn-ai">{activeChat.aiInsight.action}</button>
-                                        <button className="btn-ai" style={{ background:'transparent', border:'none', color:'#6B7280' }}>Ignorer</button>
-                                    </div>
+                                    <div className="ai-actions"><button className="btn-ai">{activeChat.aiInsight.action}</button><button className="btn-ai" style={{background:'transparent', border:'none', color:'#6B7280'}}>Ignorer</button></div>
                                 </div>
                             )}
-
                             <div className="messages-area">
                                 {activeChat.messages.map((m, i) => (
                                     <div key={i} className={`msg-wrap ${m.dir}`}>
@@ -306,13 +243,20 @@
                                 ))}
                                 <div ref={msgsEndRef} />
                             </div>
-
                             <div className="chat-input">
-                                <div className="input-box">
-                                    <input type="text" placeholder={`Envoyer un message via ${activeChat.platform}...`} />
-                                    <button className="btn-send">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: 'rotate(90deg)', marginLeft: -2 }}><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                {showSuccess ? (
+                                    <button className="btn-ai-discrete btn-ai-success" onClick={() => window.location.href='/clients.html'}>
+                                        ✅ 3 tâches créées ! <span style={{ textDecoration: 'underline', marginLeft: 4 }}>Voir CRM</span>
                                     </button>
+                                ) : (
+                                    <button className="btn-ai-discrete" onClick={extractTasks} disabled={isExtracting}>
+                                        {isExtracting ? <div className="spinner-mini"></div> : '✨'} 
+                                        {isExtracting ? 'Analyse...' : 'Extraire les tâches'}
+                                    </button>
+                                )}
+                                <div className="input-box">
+                                    <input type="text" placeholder={`Parler dans ${activeChat.platform}...`} />
+                                    <button className="btn-send">→</button>
                                 </div>
                             </div>
                         </main>
@@ -320,31 +264,58 @@
                         <main className="empty-main" style={{ padding: '60px 80px', alignItems: 'flex-start', justifyContent: 'flex-start', overflowY: 'auto' }}>
                             <h1 style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-0.5px', marginBottom: '12px' }}>Bonjour Wass 👋</h1>
                             <p style={{ fontSize: '15px', color: '#6B7280', marginBottom: '48px', lineHeight: 1.6, maxWidth: '600px' }}>
-                                L'IA a scanné vos derniers messages en arrière-plan. <br/>Voici ce qui requiert votre attention aujourd'hui avant d'ouvrir vos canaux.
+                                L'IA a scanné vos derniers messages. Voici vos urgences.
                             </p>
-
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', maxWidth: '700px' }}>
-                                <h2 style={{ fontSize: '13px', fontWeight: 900, textTransform: 'uppercase', color: '#9CA3AF', letterSpacing: '0.05em', marginBottom: '8px' }}>Urgences détectées</h2>
-                                
-                                <div style={{ background: 'white', border: '1px solid rgba(227,68,0,0.15)', borderRadius: '16px', padding: '24px', display: 'flex', gap: '20px', alignItems: 'center', cursor: 'pointer', transition: 'box-shadow 0.2s', boxShadow: '0 4px 12px rgba(227,68,0,0.03)' }} onClick={() => setActiveChat(chatsData[0])} onMouseEnter={e => e.currentTarget.style.boxShadow = '0 8px 24px rgba(227,68,0,0.06)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(227,68,0,0.03)'}>
+                                <div style={{ background: 'white', border: '1px solid rgba(227,68,0,0.15)', borderRadius: '16px', padding: '24px', display: 'flex', gap: '20px', cursor: 'pointer' }} onClick={() => setActiveChat(chatsData[0])}>
                                     <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FFF5F0', color: '#E34400', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0 }}>🎯</div>
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ fontSize: '15px', fontWeight: 800, color: '#121212', marginBottom: '4px' }}>Promesse de livraison : Thomas Martin</div>
-                                        <div style={{ fontSize: '13px', color: '#6B7280', fontWeight: 500, lineHeight: 1.4 }}>Vous avez promis sur Slack d'envoyer le fichier Figma ce matin. Cette action attend toujours votre retour.</div>
-                                    </div>
-                                    <button style={{ padding: '10px 16px', background: '#E34400', color: 'white', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: 800, cursor: 'pointer' }}>Gérer →</button>
-                                </div>
-
-                                <div style={{ background: 'white', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '16px', padding: '24px', display: 'flex', gap: '20px', alignItems: 'center', cursor: 'pointer', transition: 'box-shadow 0.2s', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }} onClick={() => setActiveChat(chatsData[1])} onMouseEnter={e => e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.04)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.02)'}>
-                                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#F0FDF4', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0 }}>💸</div>
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ fontSize: '15px', fontWeight: 800, color: '#121212', marginBottom: '4px' }}>Acompte en attente : Nadine Dupont</div>
-                                        <div style={{ fontSize: '13px', color: '#6B7280', fontWeight: 500, lineHeight: 1.4 }}>Le devis à 1200€ a été validé hier sur WhatsApp mais la facture d'acompte n'a pas été envoyée.</div>
-                                    </div>
-                                    <button style={{ padding: '10px 16px', background: '#121212', color: 'white', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: 800, cursor: 'pointer' }}>Gérer →</button>
+                                    <div><div style={{ fontSize: '15px', fontWeight: 800, color: '#121212' }}>Devis Thomas Martin</div></div>
                                 </div>
                             </div>
                         </main>
+                    )}
+
+                    /* ---- MODAL CONNECTION PARCOURS ---- */
+                    {showModal && (
+                        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                            <div className="modal-box" onClick={e => e.stopPropagation()}>
+                                <button className="btn-close" onClick={() => setShowModal(false)}>×</button>
+
+                                {connStep === 1 && (
+                                    <>
+                                        <div style={{fontSize: 40, marginBottom: 16}}>🌍</div>
+                                        <h2 className="modal-title">Ajouter un Canal</h2>
+                                        <p className="modal-desc">Connectez un outil externe. L'IA pourra l'analyser pour en extraire des tâches.</p>
+                                        <div className="grid-apps">
+                                            <div className="app-btn" onClick={simulateConnect}>
+                                                <div className="app-icon">💬</div>
+                                                <div className="app-name">WhatsApp Pro</div>
+                                            </div>
+                                            <div className="app-btn" onClick={simulateConnect}>
+                                                <div className="app-icon">📝</div>
+                                                <div className="app-name">Notion</div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {connStep === 2 && (
+                                    <div style={{padding: '40px 0'}}>
+                                        <div className="spinner"></div>
+                                        <h2 className="modal-title" style={{fontSize: 18}}>Synchronisation chiffrée...</h2>
+                                    </div>
+                                )}
+
+                                {connStep === 3 && (
+                                    <div style={{padding: '20px 0'}}>
+                                        <div style={{width: 60, height: 60, background: '#F0FDF4', color: '#10B981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30, margin: '0 auto 20px'}}>✓</div>
+                                        <h2 className="modal-title">Canal ajouté !</h2>
+                                        <p className="modal-desc" style={{marginBottom: 24}}>Les messages apparaîtront bientôt dans la boîte unifiée.</p>
+                                        <button onClick={() => setShowModal(false)} style={{width: '100%', background: '#121212', color: 'white', padding: '14px', borderRadius: '12px', fontWeight: 800, cursor: 'pointer', border: 'none'}}>Fermer</button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     )}
                 </div>
             );

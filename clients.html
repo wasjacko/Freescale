@@ -1,528 +1,99 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LRSRE4M9M2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-LRSRE4M9M2');
-  </script>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MNVZN5JS');</script>
-    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projets & Clients | Freescale Copilot</title>
+    <title>Clients | Freescale</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'Satoshi';
-            src: url('https://cdn.fontshare.com/wf/TTN6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Medium.woff2') format('woff2');
-            font-weight: 500;
-        }
-        @font-face {
-            font-family: 'Satoshi';
-            src: url('https://cdn.fontshare.com/wf/6ID6S3YDXW6XW6XW6XW6XW6XW6XW6XW6/Satoshi-Bold.woff2') format('woff2');
-            font-weight: 700;
-        }
-
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body, #root { height: 100%; }
-        body { font-family: 'Satoshi', 'Inter', sans-serif; background: #F7F8FA; color: #121212; overflow: hidden; }
-
-        /* ===== LAYOUT ===== */
-        .app { display: flex; height: 100vh; overflow: hidden; }
-
-        /* Sidebar */
-        .sidebar {
-            width: 230px; min-width: 230px;
-            display: flex; flex-direction: column;
-            background: white;
-            border-right: 1px solid rgba(0,0,0,0.06);
-        }
-
-        .logo-row {
-            display: flex; align-items: center; gap: 10px;
-            padding: 20px 20px 16px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        .logo-icon {
-            width: 30px; height: 30px; background: #E34400; border-radius: 9px;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: 900; font-size: 14px;
-        }
-        .logo-name { font-size: 16px; font-weight: 900; letter-spacing: -0.3px; }
-
-        .nav { padding: 12px 10px; flex: 1; }
-        .nav-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 9px 12px; border-radius: 10px;
-            font-size: 13px; font-weight: 700; color: #6B7280;
-            text-decoration: none; cursor: pointer; transition: all 0.15s;
-            margin-bottom: 2px;
-        }
-        .nav-item:hover { background: #F9FAFB; color: #121212; }
-        .nav-item.active { background: rgba(227,68,0,0.07); color: #E34400; }
-        .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
-
-        .sidebar-footer {
-            padding: 14px 16px; border-top: 1px solid rgba(0,0,0,0.05);
-            display: flex; align-items: center; gap: 10px;
-        }
-        .user-orb {
-            width: 34px; height: 34px; border-radius: 50%;
-            background: linear-gradient(135deg, #E34400, #ff6b35);
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 13px; font-weight: 900; flex-shrink: 0;
-        }
-        .user-name { font-size: 13px; font-weight: 800; }
-        .user-role { font-size: 9px; color: #9CA3AF; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 1px; }
-
-        /* Main */
-        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-
-        .top-bar {
-            height: 58px; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 28px;
-            background: white; border-bottom: 1px solid rgba(0,0,0,0.06);
-        }
-        .top-title { font-size: 18px; font-weight: 900; letter-spacing: -0.3px; }
-        .top-actions { display: flex; align-items: center; gap: 10px; }
-        .btn-new {
-            display: flex; align-items: center; gap: 6px;
-            padding: 9px 16px; background: #E34400; color: white;
-            font-size: 12px; font-weight: 900; border: none; border-radius: 10px;
-            cursor: pointer; letter-spacing: 0.02em; transition: all 0.15s;
-        }
-        .btn-new:hover { opacity: 0.9; transform: translateY(-1px); }
-        .search-box {
-            display: flex; align-items: center; gap: 8px;
-            padding: 8px 14px; background: #F3F4F6; border-radius: 10px;
-            font-size: 12px; font-weight: 600; color: #9CA3AF;
-        }
-
-        /* Tab bar */
-        .tab-bar {
-            display: flex; gap: 2px;
-            padding: 12px 28px 0; background: white;
-            border-bottom: 1px solid rgba(0,0,0,0.06); flex-shrink: 0;
-        }
-        .tab {
-            padding: 8px 16px; font-size: 12px; font-weight: 800;
-            color: #9CA3AF; cursor: pointer; border-bottom: 2px solid transparent;
-            transition: all 0.15s; margin-bottom: -1px;
-        }
-        .tab:hover { color: #374151; }
-        .tab.active { color: #E34400; border-bottom-color: #E34400; }
-
-        /* Content */
-        .content { flex: 1; overflow-y: auto; padding: 24px 28px; }
-        .content::-webkit-scrollbar { width: 4px; }
-        .content::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 99px; }
-
-        /* Stats row */
-        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
-        .stat-card {
-            background: white; border-radius: 16px; padding: 18px 20px;
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-        .stat-label { font-size: 10px; font-weight: 900; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
-        .stat-value { font-size: 28px; font-weight: 900; letter-spacing: -1px; line-height: 1; margin-bottom: 4px; }
-        .stat-delta { font-size: 11px; font-weight: 700; }
-        .delta-pos { color: #16A34A; }
-        .delta-neg { color: #E34400; }
-
-        /* Client grid */
-        .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
-
-        .client-card {
-            background: white; border-radius: 20px;
-            border: 1px solid rgba(0,0,0,0.06);
-            padding: 22px; cursor: pointer;
-            transition: all 0.2s; position: relative; overflow: hidden;
-        }
-        .client-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); transform: translateY(-2px); }
-        .client-card .accent-bar {
-            position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
-        }
-
-        .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
-        .card-avatar-name { display: flex; align-items: center; gap: 12px; }
-        .client-avatar {
-            width: 42px; height: 42px; border-radius: 50%;
-            font-size: 16px; font-weight: 900; display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; color: white;
-        }
-        .client-name { font-size: 15px; font-weight: 900; letter-spacing: -0.2px; }
-        .client-sector { font-size: 11px; color: #9CA3AF; font-weight: 600; margin-top: 2px; }
-
-        .health-badge {
-            padding: 4px 10px; border-radius: 99px;
-            font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em;
-        }
-        .h-critical { background: rgba(239,68,68,0.1); color: #DC2626; }
-        .h-good { background: rgba(34,197,94,0.1); color: #16A34A; }
-        .h-medium { background: rgba(245,158,11,0.1); color: #D97706; }
-
-        .card-metrics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-        .metric { text-align: center; }
-        .metric-val { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; }
-        .metric-lbl { font-size: 9px; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
-
-        .card-divider { height: 1px; background: #F3F4F6; margin-bottom: 14px; }
-
-        .card-tasks { display: flex; flex-direction: column; gap: 6px; }
-        .task-row {
-            display: flex; align-items: center; gap: 10px;
-            padding: 8px 10px; background: #F9FAFB; border-radius: 10px;
-        }
-        .task-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-        .task-text { font-size: 12px; font-weight: 700; flex: 1; color: #374151; }
-        .task-due { font-size: 10px; font-weight: 700; color: #9CA3AF; white-space: nowrap; }
-        .task-due.urgent { color: #E34400; }
-
-        .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
-        .platform-dots { display: flex; gap: 5px; }
-        .plat-dot { width: 20px; height: 20px; border-radius: 99px; display: flex; align-items: center; justify-content: center; font-size: 10px; border: 1px solid rgba(0,0,0,0.06); }
-        .last-activity { font-size: 10px; color: #9CA3AF; font-weight: 600; }
-        .open-btn {
-            padding: 6px 12px; background: #F3F4F6; border: none; border-radius: 8px;
-            font-size: 10px; font-weight: 900; color: #374151; cursor: pointer; transition: all 0.15s;
-        }
-        .open-btn:hover { background: #E34400; color: white; }
-
-        /* Project detail panel */
-        .detail-panel {
-            width: 380px; min-width: 380px;
-            background: white; border-left: 1px solid rgba(0,0,0,0.06);
-            display: flex; flex-direction: column; overflow: hidden;
-        }
-        .detail-header { padding: 22px 24px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .detail-avatar-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-        .detail-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: white; }
-        .detail-name { font-size: 18px; font-weight: 900; letter-spacing: -0.3px; }
-        .detail-sector { font-size: 12px; color: #9CA3AF; font-weight: 600; margin-top: 2px; }
-
-        .detail-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .ds { background: #F9FAFB; border-radius: 12px; padding: 10px; text-align: center; border: 1px solid rgba(0,0,0,0.04); }
-        .ds-val { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
-        .ds-lbl { font-size: 9px; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
-
-        .detail-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
-        .detail-body::-webkit-scrollbar { width: 3px; }
-        .detail-body::-webkit-scrollbar-thumb { background: #F3F4F6; border-radius: 99px; }
-
-        .section-heading { font-size: 10px; font-weight: 900; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; margin-top: 20px; }
-        .section-heading:first-child { margin-top: 0; }
-
-        .timeline-item { display: flex; gap: 12px; margin-bottom: 14px; }
-        .tl-left { display: flex; flex-direction: column; align-items: center; }
-        .tl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-        .tl-line { width: 1px; background: #F3F4F6; flex: 1; margin-top: 4px; }
-        .tl-content { padding-bottom: 14px; }
-        .tl-title { font-size: 13px; font-weight: 800; margin-bottom: 2px; }
-        .tl-sub { font-size: 11px; color: #9CA3AF; font-weight: 500; }
-
-        .detail-tasks { display: flex; flex-direction: column; gap: 8px; }
-        .dt { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #F9FAFB; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04); }
-        .dt-check { width: 18px; height: 18px; border-radius: 5px; border: 2px solid #E5E7EB; flex-shrink: 0; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
-        .dt-check:hover { border-color: #E34400; }
-        .dt-check.done { background: #E34400; border-color: #E34400; }
-        .dt-text { font-size: 12px; font-weight: 700; flex: 1; color: #374151; }
-        .dt-due { font-size: 10px; font-weight: 700; color: #9CA3AF; white-space: nowrap; }
-        .dt-due.hot { color: #E34400; }
-
-        .chat-preview-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #F9FAFB; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(0,0,0,0.04); }
-        .cp-plat { width: 26px; height: 26px; border-radius: 99px; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
-        .cp-text { font-size: 12px; font-weight: 600; color: #374151; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .cp-time { font-size: 10px; color: #9CA3AF; font-weight: 600; white-space: nowrap; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #FFFFFF; color: #121212; overflow: hidden; }
+        .layout { display: flex; height: 100vh; }
+        .sidebar { width: 240px; border-right: 1px solid #E5E7EB; background: #F9FAFB; display: flex; flex-direction: column; }
+        .logo { padding: 24px; font-weight: 900; font-size: 18px; display: flex; gap: 8px; align-items: center; letter-spacing: -0.3px; }
+        .logo-box { width: 28px; height: 28px; background: #E34400; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 14px; }
+        .nav { padding: 0 12px; }
+        .nav-item { padding: 10px 12px; border-radius: 10px; font-weight: 700; color: #6B7280; font-size: 14px; cursor: pointer; display: flex; gap: 10px; align-items: center; margin-bottom: 4px; transition: all 0.15s; text-decoration: none; }
+        .nav-item:hover { color: #121212; }
+        .nav-item.active { background: rgba(227,68,0,0.06); color: #E34400; }
+        .nav-item svg { width: 16px; height: 16px; }
+        .main { flex: 1; display: flex; flex-direction: column; padding: 40px; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; }
+        .btn-add { background: #121212; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; }
+        .table-card { border: 1px solid #E5E7EB; border-radius: 16px; overflow: hidden; background: white; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 16px 20px; background: #F9FAFB; font-size: 12px; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.1em; }
+        td { padding: 16px 20px; border-top: 1px solid #E5E7EB; font-size: 14px; font-weight: 500; }
+        .status { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; }
+        .status-on { background: #F0FDF4; color: #10B981; }
+        .status-off { background: #FEF2F2; color: #EF4444; }
+        .task-count { display: inline-flex; align-items: center; gap: 6px; background: #FFF8F5; color: #E34400; padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 11px; }
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MNVZN5JS"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-<div id="root"></div>
-
-<script type="text/babel">
-const { useState } = React;
-
-const clients = [
-    {
-        id: 1, name: 'Nadine Dupont', initials: 'ND', sector: 'E-commerce & Branding', color: '#E34400',
-        accentColor: '#E34400', health: 'good', healthLabel: 'Actif',
-        revenue: '1 200€', tasks: 3, messages: 8, lastSeen: 'Il y a 2h',
-        platforms: ['✉️', '💬'],
-        metrics: [{ val: '1 200€', lbl: 'En cours' }, { val: '3', lbl: 'Tâches' }],
-        tasks_list: [
-            { text: 'Lancer projet Refonte UX', due: 'Lundi', urgent: true },
-            { text: 'Valider la maquette homepage', due: 'Mercredi', urgent: false },
-            { text: 'Envoyer la facture finale', due: 'Vendredi', urgent: false },
-        ],
-        timeline: [
-            { title: 'Devis accepté — 1 200€', sub: 'WhatsApp · Aujourd\'hui', color: '#E34400' },
-            { title: 'Kick-off planifié lundi', sub: 'WhatsApp · Aujourd\'hui', color: '#6366F1' },
-            { title: 'Prise de contact initiale', sub: 'Gmail · Il y a 3 jours', color: '#9CA3AF' },
-        ],
-        messages: [
-            { channel: '💬', text: 'Ok pour le devis, on commence lundi ?', time: '12:35' },
-            { channel: '💬', text: 'J\'ai reçu la maquette, top !', time: 'Hier' },
-        ]
-    },
-    {
-        id: 2, name: 'Thomas Martin', initials: 'TM', sector: 'SaaS B2B · Développement', color: '#6366F1',
-        accentColor: '#6366F1', health: 'medium', healthLabel: 'En attente',
-        revenue: '650€', tasks: 2, messages: 4, lastSeen: 'Hier',
-        platforms: ['🟣', '✉️'],
-        metrics: [{ val: '650€', lbl: 'En cours' }, { val: '2', lbl: 'Tâches' }],
-        tasks_list: [
-            { text: 'Envoyer accès Figma', due: 'Aujourd\'hui 18h', urgent: true },
-            { text: 'Review sprint S4', due: 'Jeudi', urgent: false },
-        ],
-        timeline: [
-            { title: 'Slack : fichiers Figma demandés', sub: 'Slack · Hier', color: '#6366F1' },
-            { title: 'Sprint review planifiée', sub: 'Slack · Il y a 2 jours', color: '#9CA3AF' },
-        ],
-        messages: [
-            { channel: '🟣', text: 'N\'oublie pas les accès Figma ce soir.', time: 'Hier' },
-            { channel: '✉️', text: 'On peut décaler le point à jeudi ?', time: 'Il y a 2j' },
-        ]
-    },
-    {
-        id: 3, name: 'Sophie Morel', initials: 'SM', sector: 'Stratégie Digitale', color: '#10B981',
-        accentColor: '#10B981', health: 'good', healthLabel: 'Payé',
-        revenue: '890€', tasks: 0, messages: 1, lastSeen: 'Il y a 3j',
-        platforms: ['✉️'],
-        metrics: [{ val: '890€', lbl: 'Facturé' }, { val: '0', lbl: 'Tâches' }],
-        tasks_list: [],
-        timeline: [
-            { title: 'Facture #0042 payée — 890€', sub: 'Gmail · Il y a 3 jours', color: '#10B981' },
-            { title: 'Livraison mission stratégie', sub: 'Il y a 5 jours', color: '#9CA3AF' },
-        ],
-        messages: [
-            { channel: '✉️', text: 'Facture payée, merci pour tout !', time: 'Il y a 3j' },
-        ]
-    },
-    {
-        id: 4, name: 'Kevin Blanc', initials: 'KB', sector: 'Marketing & Performance', color: '#F59E0B',
-        accentColor: '#F59E0B', health: 'critical', healthLabel: 'Urgent',
-        revenue: '2 400€', tasks: 5, messages: 12, lastSeen: 'Il y a 1h',
-        platforms: ['💬', '🟣', '✉️'],
-        metrics: [{ val: '2 400€', lbl: 'En cours' }, { val: '5', lbl: 'Tâches' }],
-        tasks_list: [
-            { text: 'Livrer rapport analytics Q1', due: 'Demain', urgent: true },
-            { text: 'Campagne Ads — validation créas', due: 'Aujourd\'hui', urgent: true },
-            { text: 'Réunion hebdo équipe marketing', due: 'Vendredi', urgent: false },
-        ],
-        timeline: [
-            { title: 'Deadline Q1 rapport — J-1', sub: 'WhatsApp · Aujourd\'hui', color: '#EF4444' },
-            { title: 'Budget campagne validé +2 400€', sub: 'Gmail · Il y a 4 jours', color: '#F59E0B' },
-        ],
-        messages: [
-            { channel: '💬', text: 'Le rapport Q1 doit être prêt demain sans faute.', time: '09:12' },
-            { channel: '🟣', text: 'Tu peux valider les créas Ads ?', time: 'Hier' },
-        ]
-    },
-];
-
-const SidebarNav = ({ active }) => (
-    <aside className="sidebar">
-        <div className="logo-row">
-            <div className="logo-icon">f</div>
-            <span className="logo-name">Freescale</span>
-        </div>
-        <nav className="nav">
-            <a className="nav-item" href="/dashboard.html">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                Unified Inbox
-            </a>
-            <a className="nav-item active" href="/clients.html">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                Projets & Clients
-            </a>
-        </nav>
-    </aside>
-);
-
-const DetailPanel = ({ client, onClose }) => {
-    const [checked, setChecked] = useState({});
-    if (!client) return null;
-    return (
-        <aside className="detail-panel">
-            <div className="detail-header">
-                <div className="detail-avatar-row">
-                    <div className="detail-avatar" style={{ background: client.color }}>{client.initials}</div>
-                    <div style={{ flex: 1 }}>
-                        <div className="detail-name">{client.name}</div>
-                        <div className="detail-sector">{client.sector}</div>
+    <div id="root"></div>
+    <script type="text/babel">
+        const ClientsView = () => (
+            <div className="layout">
+                <aside className="sidebar">
+                    <div className="logo"><div className="logo-box">f</div> Freescale</div>
+                    <nav className="nav">
+                        <a href="/dashboard.html" className="nav-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path></svg>
+                            Boîte de Réception
+                        </a>
+                        <a href="/clients.html" className="nav-item active">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            CRM & Clients
+                        </a>
+                    </nav>
+                </aside>
+                <main className="main">
+                    <header className="header">
+                        <h1 className="title">Gestion des Clients</h1>
+                        <button className="btn-add">+ Nouveau Client</button>
+                    </header>
+                    <div className="table-card">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Statut</th>
+                                    <th>Tâches IA</th>
+                                    <th>Dernière Synchro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Thomas Martin</strong><br/><small style={{color:'#6B7280'}}>TechFlow SDK</small></td>
+                                    <td><span className="status status-on">Actif</span></td>
+                                    <td><span className="task-count">✨ 3 nouvelles</span></td>
+                                    <td>Aujourd'hui, 10:42</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sophie Lemaire</strong><br/><small style={{color:'#6B7280'}}>E-commerce</small></td>
+                                    <td><span className="status status-on">Actif</span></td>
+                                    <td><span className="task-count">✨ 1 nouvelle</span></td>
+                                    <td>Aujourd'hui, 09:15</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Marc (Studio D)</strong><br/><small style={{color:'#6B7280'}}>Freelance Designer</small></td>
+                                    <td><span className="status status-off">En attente</span></td>
+                                    <td>—</td>
+                                    <td>Mardi, 11:00</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <button onClick={onClose} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 18, color: '#9CA3AF', padding: 4 }}>✕</button>
-                </div>
-                <div className="detail-stats">
-                    {client.metrics.map((m, i) => (
-                        <div key={i} className="ds" style={i === 0 ? { background: '#121212', borderColor: '#121212' } : {}}>
-                            <div className="ds-val" style={{ color: i === 0 ? '#E34400' : '#121212' }}>{m.val}</div>
-                            <div className="ds-lbl" style={{ color: i === 0 ? 'rgba(255,255,255,0.35)' : undefined }}>{m.lbl}</div>
-                        </div>
-                    ))}
-                </div>
+                </main>
             </div>
-            <div className="detail-body">
-                <div className="section-heading">Tâches en cours</div>
-                <div className="detail-tasks">
-                    {client.tasks_list.length === 0 && (
-                        <div style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 600, padding: '8px 0' }}>Aucune tâche active 🎉</div>
-                    )}
-                    {client.tasks_list.map((t, i) => (
-                        <div key={i} className="dt">
-                            <div className={`dt-check ${checked[i] ? 'done' : ''}`} onClick={() => setChecked(p => ({ ...p, [i]: !p[i] }))}>
-                                {checked[i] && <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                            </div>
-                            <span className="dt-text" style={{ textDecoration: checked[i] ? 'line-through' : undefined, opacity: checked[i] ? 0.4 : 1 }}>{t.text}</span>
-                            <span className={`dt-due ${t.urgent ? 'hot' : ''}`}>{t.due}</span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="section-heading">Messages récents</div>
-                {client.messages.map((m, i) => (
-                    <div key={i} className="chat-preview-item">
-                        <div className="cp-plat">{m.channel}</div>
-                        <span className="cp-text">{m.text}</span>
-                        <span className="cp-time">{m.time}</span>
-                    </div>
-                ))}
-
-                <div className="section-heading">Historique</div>
-                {client.timeline.map((t, i) => (
-                    <div key={i} className="timeline-item">
-                        <div className="tl-left">
-                            <div className="tl-dot" style={{ background: t.color }} />
-                            {i < client.timeline.length - 1 && <div className="tl-line" />}
-                        </div>
-                        <div className="tl-content">
-                            <div className="tl-title">{t.title}</div>
-                            <div className="tl-sub">{t.sub}</div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </aside>
-    );
-};
-
-const App = () => {
-    const [tab, setTab] = useState('all');
-    const [selected, setSelected] = useState(clients[0]);
-
-    const filtered = tab === 'all' ? clients : tab === 'active' ? clients.filter(c => c.health !== 'good' || c.tasks > 0) : clients.filter(c => c.health === 'critical');
-
-    return (
-        <div className="app">
-            <SidebarNav />
-
-            <div className="main">
-                {/* Top bar */}
-                <div className="top-bar">
-                    <span className="top-title">Projets & Clients</span>
-                </div>
-
-
-                {/* Content */}
-                <div className="content">
-                    {/* Stats */}
-                    <div className="stats-row">
-                        {[
-                            { label: 'Clients actifs', value: '4', delta: '+1 ce mois', pos: true },
-                            { label: 'En cours', value: '5 140€', delta: '+890€', pos: true },
-                            { label: 'Tâches détectées', value: '10', delta: '3 urgentes', pos: false },
-                        ].map((s, i) => (
-                            <div key={i} className="stat-card">
-                                <div className="stat-label">{s.label}</div>
-                                <div className="stat-value">{s.value}</div>
-                                <div className={`stat-delta ${s.pos ? 'delta-pos' : 'delta-neg'}`}>{s.delta}</div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Client cards */}
-                    <div className="clients-grid">
-                        {filtered.map(client => (
-                            <div key={client.id} className="client-card" onClick={() => setSelected(client)}>
-                                <div className="accent-bar" style={{ background: client.accentColor }} />
-
-                                <div className="card-top">
-                                    <div className="card-avatar-name">
-                                        <div className="client-avatar" style={{ background: client.color }}>{client.initials}</div>
-                                        <div>
-                                            <div className="client-name">{client.name}</div>
-                                            <div className="client-sector">{client.sector}</div>
-                                        </div>
-                                    </div>
-                                    <span className={`health-badge ${client.health === 'good' ? 'h-good' : client.health === 'medium' ? 'h-medium' : 'h-critical'}`}>
-                                        {client.healthLabel}
-                                    </span>
-                                </div>
-
-                                <div className="card-metrics">
-                                    {client.metrics.map((m, i) => (
-                                        <div key={i} className="metric">
-                                            <div className="metric-val">{m.val}</div>
-                                            <div className="metric-lbl">{m.lbl}</div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="card-divider" />
-
-                                <div className="card-tasks">
-                                    {client.tasks_list.slice(0, 2).map((t, i) => (
-                                        <div key={i} className="task-row">
-                                            <div className="task-dot" style={{ background: t.urgent ? '#E34400' : '#9CA3AF' }} />
-                                            <span className="task-text">{t.text}</span>
-                                            <span className={`task-due ${t.urgent ? 'urgent' : ''}`}>{t.due}</span>
-                                        </div>
-                                    ))}
-                                    {client.tasks_list.length === 0 && (
-                                        <div style={{ fontSize: 11, color: '#9CA3AF', fontWeight: 600, padding: '4px 0' }}>Aucune tâche en cours 🎉</div>
-                                    )}
-                                </div>
-
-                                <div className="card-footer">
-                                    <div className="platform-dots">
-                                        {client.platforms.map((p, i) => (
-                                            <div key={i} className="plat-dot">{p}</div>
-                                        ))}
-                                    </div>
-                                    <span className="last-activity">{client.lastSeen}</span>
-                                    <button className="open-btn" onClick={e => { e.stopPropagation(); setSelected(client); }}>Voir →</button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Detail panel */}
-            <DetailPanel client={selected} onClose={() => setSelected(null)} />
-        </div>
-    );
-};
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-</script>
+        );
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ClientsView />);
+    </script>
 </body>
 </html>
